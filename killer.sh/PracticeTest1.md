@@ -118,7 +118,6 @@ kube-scheduler: [TYPE]
 kube-controller-manager: [TYPE]
 etcd: [TYPE]
 dns: [TYPE] [NAME]
-
 ```
 
 <p>Choices of [TYPE] are: not-installed, process, static-pod, pod</p>

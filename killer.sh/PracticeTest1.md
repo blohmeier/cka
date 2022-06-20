@@ -248,52 +248,25 @@ dns: [TYPE] [NAME]
 </p>
 </details>
 
-### Q16 | Logging sidecar ###
+### Q16 | 2% ###
 <details><summary>
-1of3 The Tech Lead of Mercury2D decided its time for more logging, to finally fight all these missing data incidents. There is an existing container named cleaner-con in Deployment cleaner in Namespace mercury. This container mounts a volume and writes logs into a file called cleaner.log. The yaml for the existing Deployment is available at /opt/course/16/cleaner.yaml. Persist your changes at /opt/course/16/cleaner-new.yaml but also make sure the Deployment is running.
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>Create a new Namespace called cka-master.</p>
+<p>Write the names of all namespaced Kubernetes resources (like Pod, Secret, ConfigMap...) into /opt/course/16/resources.txt.</p>
+<p>Find the project-* Namespace with the highest number of Roles defined in it and write its name and amount of Roles into /opt/course/16/crowded-namespace.txt.</p>
 </summary>
 <p>
   
 ```bash
-cp /opt/course/16/cleaner.yaml /opt/course/16/cleaner-new.yaml
+
 ```
 </p>
 </details>
 
-<details><summary>
-2of3 Create a sidecar container named logger-con, image busybox:1.31.0, which mounts the same volume and writes the content of cleaner.log to stdout, you can use the tail -f command for this. This way it can be picked up by kubectl logs.
-</summary>
-<p>
-  
-```bash
-#vim into cleaner-new.yml and add under spec.template.spec.containers:
-- name: logger-con
-  image: busybox:1.31.0
-  command: ["sh", "-c", "tail -f /var/log/cleaner/cleaner.log"]
-  volumeMounts:
-  - name: logs
-    mountPath: /var/log/cleaner
-k apply -f /opt/course/16/cleaner-new.yaml #'...but also make sure the Deployment is running'
-```
-</p>
-</details>
 
+### Q17 | 3% ###
 <details><summary>
-3of3 Check if the logs of the new container reveal something about the missing data incidents.
-</summary>
-<p>
-  
-```bash
-k -n mercury logs cleaner-<dep>-<pod> -c logger-con
-```
-</p>
-</details>
-
-### Q17 | InitContainer ###
-<details><summary>
-1of2 Last lunch you told your coworker from department Mars Inc how amazing InitContainers are. Now he would like to see one in action. There is a Deployment yaml at /opt/course/17/test-init-container.yaml. This Deployment spins up a single Pod of image nginx:1.17.3-alpine and serves files from a mounted volume, which is empty right now.
-Create an InitContainer named init-con which also mounts that volume and creates a file index.html with content check this out! in the root of the mounted volume. For this test we ignore that it doesn't contain valid html.
-The InitContainer should be using image busybox:1.31.0. 
+<p>Use context: kubectl config use-context k8s-c1-H</p>
 </summary>
 <p>
 

@@ -59,7 +59,7 @@ https://killer.sh/dashboard
 </p>
 </details>
 
-### Q5 | ServiceAccount, Secret ###
+### Q5 | 1% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>There are various Pods in all namespaces. Write a command into /opt/course/5/find_pods.sh which lists all Pods sorted by their AGE (metadata.creationTimestamp).</p>
@@ -73,24 +73,17 @@ https://killer.sh/dashboard
 </p>
 </details>
 
-### Q6 | ReadinessProbe ###
+### Q6 | 8% ###
 <details><summary>
-Create a single Pod named pod6 in Namespace default of image busybox:1.31.0. The Pod should have a readiness-probe executing cat /tmp/ready. It should initially wait 5 and periodically wait 10 seconds. This will set the container ready only if the file /tmp/ready exists.
-The Pod should run the command touch /tmp/ready && sleep 1d, which will create the necessary file to be ready and then idles. Create the Pod and confirm it starts.
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>Create a new PersistentVolume named safari-pv. It should have a capacity of 2Gi, accessMode ReadWriteOnce, hostPath /Volumes/Data and no storageClassName defined.</p>
+<p>Next create a new PersistentVolumeClaim in Namespace project-tiger named safari-pvc . It should request 2Gi storage, accessMode ReadWriteOnce and should not define a storageClassName. The PVC should bound to the PV correctly.</p>
+<p>Finally create a new Deployment safari in Namespace project-tiger which mounts that volume at /tmp/safari-data. The Pods of that Deployment should be of image httpd:2.4.41-alpine.</p>
 </summary>
 <p>
   
 ```bash
-k run pod6 --image=busybox:1.31.0 $dy --command -- sh -c "touch /tmp/ready && sleep 1d" > 6.yaml
-vim 6.yml #add spec.containers.readinessProbe and add below that:
-exec:                                    # add
-  command:                               # add
-  - sh                                   # add
-  - -c                                   # add
-  - cat /tmp/ready                       # add
-initialDelaySeconds: 5                   # add
-periodSeconds: 10                        # add
-k create -f 6.yml
+
 ```
 </p>
 </details>

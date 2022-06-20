@@ -88,19 +88,18 @@ https://killer.sh/dashboard
 </p>
 </details>
 
-### Q7 | Pods, Namespaces ###
+### Q7 | 1% ###
 <details><summary>
-<p>The board of Team Neptune decided to take over control of one e-commerce webserver from Team Saturn. The administrator who once setup this webserver is not part of the organisation any longer. All information you could get was that the e-commerce system is called my-happy-shop.</p>
-<p>Search for the correct Pod in Namespace saturn and move it to Namespace neptune. It doesn't matter if you shut it down and spin it up again, it probably hasn't any customers anyways.</p>
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>The metrics-server hasn't been installed yet in the cluster, but it's something that should be done soon. Your college would already like to know the kubectl commands to:</p>
+<p>1. show node resource usage</p>
+<p>2. show Pod and their containers resource usage</p>
+<p>Please write the commands into /opt/course/7/node.sh and /opt/course/7/pod.sh.</p>
 </summary>
 <p>
   
 ```bash
-k -n saturn get pod -o yaml | grep my-happy-shop -A10
-k -n saturn get pod webserver-sat-003 -o yaml > 7_webserver-sat-003.yaml
-vim 7_webserver-sat-003.yaml #change ns, remove "status:" section, token vol & volMount, & nodeName
-k create -f 7_webserver-sat-003.yaml
-k -n saturn delete pod webserver-sat-003 $fg
+
 ```
 </p>
 </details>

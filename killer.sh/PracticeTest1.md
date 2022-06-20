@@ -204,52 +204,30 @@ dns: [TYPE] [NAME]
 </p>
 </details>
 
-### Q14 | Secret, Secret-Volume, Secret-Env ###
+### Q14 | 2% ###
 <details><summary>
-You need to make changes on an existing Pod in Namespace moon called secret-handler. Create a new Secret secret1 which contains user=test and pass=pwd. The Secret's content should be available in Pod secret-handler as environment variables SECRET1_USER and SECRET1_PASS. The yaml for Pod secret-handler is available at /opt/course/14/secret-handler.yaml.
-There is existing yaml for another Secret at /opt/course/14/secret2.yaml, create this Secret and mount it inside the same Pod at /tmp/secret2. Your changes should be saved under /opt/course/14/secret-handler-new.yaml. Both Secrets should only be available in Namespace moon.
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>You're ask to find out following information about the cluster k8s-c1-H:</p>
+<p>1. How many master nodes are available?</p>
+<p>2. How many worker nodes are available?</p>
+<p>3. What is the Service CIDR?</p>
+<p>4. Which Networking (or CNI Plugin) is configured and where is its config file?</p>
+<p>5. Which suffix will static pods have that run on cluster1-worker1?</p>
+<p>Write your answers into file /opt/course/14/cluster-info, structured like this:</p>
+
+```
+# /opt/course/14/cluster-info
+1: [ANSWER]
+2: [ANSWER]
+3: [ANSWER]
+4: [ANSWER]
+5: [ANSWER]
+```
 </summary>
 <p>
   
 ```bash
-k -n moon create secret generic secret1 --from-literal user=test --from-literal pass=pwd
-k -n moon -f /opt/course/14/secret2.yaml create
-cp /opt/course/14/secret-handler.yaml /opt/course/14/secret-handler-new.yaml
-vim /opt/course/14/secret-handler-new.yaml #add the following at the indicated indent level:
-#spec.volumes
-- name: secret2-volume
-  secret:
-    secretName: secret2
-#spec.containers.volumemounts
-- name: secret2-volume
-  mountPath: /tmp/secret2
-#spec.containers.env
- - name: SECRET1_USER
-   valueFrom:
-     secretKeyRef:
-       name: secret1
-       key: user
- - name: SECRET1_PASS
-   valueFrom:
-     secretKeyRef:
-       name: secret1
-       key: pass
-k delete pod -n moon secret-handler
-k create -f /opt/course/14/secret-handler-new.yaml
-#verify 1of3:
-k -n moon exec secret-handler -- env | grep SECRET1 #should yield:
-SECRET1_USER=test
-SECRET1_PASS=pwd
-#verify 2of2:
-k -n moon exec secret-handler -- find /tmp/secret2 #should yield:
-/tmp/secret2
-/tmp/secret2/..data
-/tmp/secret2/key
-/tmp/secret2/..2019_09_11_09_03_08.147048594
-/tmp/secret2/..2019_09_11_09_03_08.147048594/key
-#now that found where 'key' is located, get content of key:
-k -n moon exec secret-handler -- cat /tmp/secret2/key #should yield:
-12345678
+
 ```
 </p>
 </details>

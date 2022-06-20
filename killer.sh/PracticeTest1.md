@@ -61,16 +61,14 @@ https://killer.sh/dashboard
 
 ### Q5 | ServiceAccount, Secret ###
 <details><summary>
-Team Neptune has its own ServiceAccount named neptune-sa-v2 in Namespace neptune. A coworker needs the token from the Secret that belongs to that ServiceAccount. Write the base64 decoded token to file /opt/course/5/token.
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>There are various Pods in all namespaces. Write a command into /opt/course/5/find_pods.sh which lists all Pods sorted by their AGE (metadata.creationTimestamp).</p>
+<p>Write a second command into /opt/course/5/find_pods_uid.sh which lists all Pods sorted by field metadata.uid. Use kubectl sorting for both commands.</p>
 </summary>
 <p>
   
 ```bash
-k -n neptune get sa neptune-sa-v2 -o yaml | grep secret -A 2
-k -n neptune get secret neptune-sa-v2-token-lwhhl -o yaml | base64 -d
-OR
-k -n neptune describe secret neptune-sa-v2-token-lwhhl
-vim /opt/course/5/token #copy part under "token:" here from step above 
+ 
 ```
 </p>
 </details>

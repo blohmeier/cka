@@ -146,21 +146,15 @@ dns: [TYPE] [NAME]
 </p>
 </details>
 
-add below from _`Deployment`_ example yaml.
-
-### Q10 | Service, Logs ###
+### Q10 | 6% ###
 <details><summary>
-<p>Team Pluto needs a new cluster internal Service. Create a ClusterIP Service named project-plt-6cc-svc in Namespace pluto. This Service should expose a single Pod named project-plt-6cc-api of image nginx:1.17.3-alpine, create that Pod as well. The Pod should be identified by label project: plt-6cc-api. The Service should use tcp port redirection of 3333:80.</p>
-
-<p>Finally use for example curl from a temporary nginx:alpine Pod to get the response from the Service. Write the response into /opt/course/10/service_test.html. Also check if the logs of Pod project-plt-6cc-api show the request and write those into /opt/course/10/service_test.log.</p>
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>Create a new ServiceAccount processor in Namespace project-hamster. Create a Role and RoleBinding, both named processor as well. These should allow the new SA to only create Secrets and ConfigMaps in that Namespace.</p>
 </summary>
 <p>
   
 ```bash
-k -n pluto run project-plt-6cc-api --image=nginx:1.17.3-alpine --labels project=plt-6cc-api
-k -n pluto expose pod project-plt-6cc-api --name project-plt-6cc-svc --port 3333 --target-port 80
-k run tmp --restart=Never --rm --image=nginx:alpine -i -- curl http://project-plt-6cc-svc.pluto:3333 > /opt/course/10/service_test.html #pipe results from confirming cnxn w/tmp pod
-k -n pluto logs project-plt-6cc-api > /opt/course/10/service_test.log
+
 ```
 </p>
 </details>

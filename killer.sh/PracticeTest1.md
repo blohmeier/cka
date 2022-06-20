@@ -100,7 +100,8 @@ k run am-i-ready --image=nginx:1.16.1-alpine --labels="id=cross-server-ready"
 <p>
   
 ```bash
- 
+echo -e 'kubectl get pod -A --sort-by=.metadata.creationTimestamp' > /opt/course/5/find_pods.sh
+echo -e 'kubectl get pod -A --sort-by=.metadata.uid' > /opt/course/5/find_pods_uid.sh
 ```
 </p>
 </details>

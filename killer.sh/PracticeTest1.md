@@ -73,7 +73,20 @@ k -n project-c13 scale sts o3db --replicas 1 --record
 <p>
   
 ```bash
-
+k run ready-if-service-ready --image=nginx:1.16.1-alpine $dy > 4_pod1.yml
+vim 4_pod1.yml #add under spec.containers:
+livenessProbe:                               
+      exec:
+        command:
+        - 'true'
+    readinessProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - 'wget -T2 -O- http://service-am-i-ready:80'
+k create -f 4_pod1.yml
+k run am-i-ready --image=nginx:1.16.1-alpine --labels="id=cross-server-ready"
 ```
 </p>
 </details>

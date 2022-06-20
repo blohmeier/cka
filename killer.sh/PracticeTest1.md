@@ -370,3 +370,36 @@ dns: [TYPE] [NAME]
 ```
 </p>
 </details>
+
+### Q24 | 9% ###
+<details><summary>
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>There was a security incident where an intruder was able to access the whole cluster from a single hacked backend Pod.</p>
+<p>To prevent this create a NetworkPolicy called np-backend in Namespace project-snake. It should allow the backend-* Pods only to:</p>
+<p>- connect to db1-* Pods on port 1111</p>
+<p>- connect to db2-* Pods on port 2222</p>
+<p>Use the app label of Pods in your policy.</p>
+<p>After implementation, connections from backend-* Pods to vault-* Pods on port 3333 should for example no longer work.</p>
+</summary>
+<p>
+  
+```bash
+
+```
+</p>
+</details>
+
+### Q25 | 8% ###
+<details><summary>
+<p>Use context: kubectl config use-context k8s-c3-CCC</p>
+<p>Make a backup of etcd running on cluster3-master1 and save it on the master node at /tmp/etcd-backup.db.</p>
+<p>Then create a Pod of your kind in the cluster./p>
+<p>Finally restore the backup, confirm the cluster is still working and that the created Pod is no longer with us.</p>
+</summary>
+<p>
+  
+```bash
+
+```
+</p>
+</details>

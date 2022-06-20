@@ -327,14 +327,13 @@ dns: [TYPE] [NAME]
 ### Q21 | 2% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c3-CCC</p>
-<p>Your coworker said node cluster3-worker2 is running an older Kubernetes version and is not even part of the cluster. Update Kubernetes on that node to the exact version that's running on cluster3-master1. Then add this node to the cluster. Use kubeadm for this.</p>
-<p>Your coworker said node cluster3-worker2 is running an older Kubernetes version and is not even part of the cluster. Update Kubernetes on that node to the exact version that's running on cluster3-master1. Then add this node to the cluster. Use kubeadm for this.</p>
+<p>Create a Static Pod named my-static-pod in Namespace default on cluster3-master1. It should be of image nginx:1.16-alpine and have resource requests for 10m CPU and 20Mi memory.</p>
+<p>Then create a NodePort Service named static-pod-service which exposes that static Pod on port 80 and check if it has Endpoints and if its reachable through the cluster3-master1 internal IP address. You can connect to the internal node IPs from your main terminal.</p>
 </summary>
 <p>
   
 ```bash
-k -n sun label pod -l "type in (worker,runner)" protected=true
-k -n sun annotate pod -l protected=true protected="do not delete this pod"
+
 ```
 </p>
 </details>

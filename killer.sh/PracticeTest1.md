@@ -177,7 +177,7 @@ k create -f 6_pv_pvc_dep.yml
 </p>
 </details>
 
-### Q7 | 1% ###
+### Q7 | Node and Pod Resource Usage | 1% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>The metrics-server hasn't been installed yet in the cluster, but it's something that should be done soon. Your college would already like to know the kubectl commands to:</p>
@@ -188,12 +188,13 @@ k create -f 6_pv_pvc_dep.yml
 <p>
   
 ```bash
-
+echo -e 'kubectl top node' > /opt/course/7/node.sh
+echo -e 'kubectl top pod --containers=true' > /opt/course/7/pod.sh
 ```
 </p>
 </details>
 
-### Q8 | 2% ###
+### Q8 | Get Master Information | 2% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>Ssh into the master node with ssh cluster1-master1. Check how the master components kubelet, kube-apiserver, kube-scheduler, kube-controller-manager and etcd are started/installed on the master node. Also find out the name of the DNS application and how it's started/installed on the master node.</p>

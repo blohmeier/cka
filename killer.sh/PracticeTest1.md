@@ -63,7 +63,7 @@ k -n project-c13 scale sts o3db --replicas 1 --record
 </p>
 </details>
 
-### Q4 | 4% ###
+### Q4 | Pod Ready if Service is reachable | 4% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>Do the following in Namespace default. Create a single Pod named ready-if-service-ready of image nginx:1.16.1-alpine. Configure a LivenessProbe which simply runs true. Also configure a ReadinessProbe which does check if the url http://service-am-i-ready:80 is reachable, you can use wget -T2 -O- http://service-am-i-ready:80 for this. Start the Pod and confirm it isn't ready because of the ReadinessProbe.</p>

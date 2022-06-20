@@ -1,6 +1,8 @@
 <details><summary>Exam links</summary>
 https://killer.sh/dashboard
 
+DON'T UNDERSTAND: 
+8
 </p></details>
   
 ### Q1 | Contexts | 1% ###
@@ -215,12 +217,24 @@ dns: [TYPE] [NAME]
 <p>
   
 ```bash
+ssh cluster1-master1
+find /etc/systemd/system/ | grep 'kube\|etcd' #only 3 services named kube or etcd; cluster must have been set up using kubeadm, so know need next command
+k -n kube-system get pod -o wide | grep master1 #shows 5 static pods with -cluster1-master1 suffix.
+k -n kube-system get deploy
 
+# /opt/course/8/master-components.txt
+kubelet: process
+kube-apiserver: static-pod
+kube-scheduler: static-pod
+kube-scheduler-special: static-pod (status CrashLoopBackOff)
+kube-controller-manager: static-pod
+etcd: static-pod
+dns: pod coredns
 ```
 </p>
 </details>
 
-### Q9 | 5% ###
+### Q9 | Kill Scheduler, Manual Scheduling | 5% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c2-AC</p>
 <p>Ssh into the master node with ssh cluster2-master1. Temporarily stop the kube-scheduler, this means in a way that you can start it again afterwards.</p>
@@ -231,7 +245,23 @@ dns: [TYPE] [NAME]
 <p>
 
 ```bash
-
+ssh cluster2-master1
+k -n kube-system get pod | grep schedule #confirm scheduler is running
+mv /etc/kubernetes/manifests/kube-scheduler.yaml .. #temporarily kill the scheduler
+k -n kube-system get pod | grep schedule #confirm scheduler is stopped
+exit #leave ssh
+k run manual-schedule --image=httpd:2.4-alpine
+k get pod manual-schedule -o yaml > 9.yml #add under .spec:
+nodeName: cluster2-master1
+k replace -f 9.yml --force
+k get po manual-schedule -o wide
+#finally, restart scheduler, schedule second test pod, confirm it's running to prove scheduler back to normal
+ssh cluster2-master1
+mv kube-scheduler.yaml /etc/kubernetes/manifests/
+k -n kube-system get pod | grep schedule #confirm scheduler is running again
+exit #leave ssh
+k run manual-schedule2 --image=httpd:2.4-alpine #schedule second test pod
+k get po -o wide | grep schedule #confirm both pods running - i.e. scheduler back to normal
 ```
 </p>
 </details>

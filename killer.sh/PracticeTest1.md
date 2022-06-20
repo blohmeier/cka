@@ -352,3 +352,21 @@ dns: [TYPE] [NAME]
 ```
 </p>
 </details>
+
+### Q23 | 2% ###
+<details><summary>
+<p>Use context: kubectl config use-context k8s-c2-AC</p>
+<p>Node cluster2-worker1 has been added to the cluster using kubeadm and TLS bootstrapping.</p>
+<p>Find the "Issuer" and "Extended Key Usage" values of the cluster2-worker1:</p>
+<p>kubelet client certificate, the one used for outgoing connections to the kube-apiserver.</p>
+<p>kubelet server certificate, the one used for incoming connections from the kube-apiserver.</p>
+<p>Write the information into file /opt/course/23/certificate-info.txt.</p>
+<p>Compare the "Issuer" and "Extended Key Usage" fields of both certificates and make sense of these.</p>
+</summary>
+<p>
+  
+```bash
+
+```
+</p>
+</details>

@@ -3,7 +3,7 @@ https://killer.sh/dashboard
 
 </p></details>
   
-### Q1 | 1% ###
+### Q1 | Contexts | 1% ###
 <details><summary>
 <p> You have access to multiple clusters from your main terminal through kubectl contexts. Write all those context names into /opt/course/1/contexts. </p>
 <p> Next write a command to display the current context into /opt/course/1/context_default_kubectl.sh, the command should use kubectl. </p>
@@ -19,7 +19,7 @@ echo -e 'cat ~/.kube/config | grep current | sed -e "s/current-context: //"' > /
 </p>
 </details>
 
-### Q2 | 3% ###
+### Q2 | Schedule Pod on Master Node | 3% ###
 <details><summary>
 <p> Use context: kubectl config use-context k8s-c1-H </p>
 <p> Create a single Pod of image httpd:2.4.41-alpine in Namespace default. The Pod should be named pod1 and the container should be named pod1-container. This Pod should only be scheduled on a master node, do not add new labels any nodes. </p>
@@ -48,7 +48,7 @@ echo -e 'master nodes usually have a taint defined' > /opt/course/2/master_sched
 </p>
 </details>
 
-### Q3 | 1% ###
+### Q3 | Scale down StatefulSet | 1% ###
 <details><summary>
 <p> Use context: kubectl config use-context k8s-c1-H </p>
 <p> There are two Pods named o3db-* in Namespace project-c13. C13 management asked you to scale the Pods down to one replica to save resources. Record the action. </p>
@@ -56,6 +56,8 @@ echo -e 'master nodes usually have a taint defined' > /opt/course/2/master_sched
 <p>
   
 ```bash
+k -n project-c13 get pod --show-labels | grep o3db #confirm have to work with a stateful set
+k -n project-c13 scale sts o3db --replicas 1 --record
 
 ```
 </p>

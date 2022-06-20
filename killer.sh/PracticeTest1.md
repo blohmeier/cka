@@ -298,46 +298,15 @@ dns: [TYPE] [NAME]
 <details><summary>
 *this task can only be solved if questions 18 or 20 have been successfully implemented and the k8s-c3-CCC cluster has a functioning worker node*
 <p>Use context: kubectl config use-context k8s-c3-CCC</p>
+<p>Do the following in a new Namespace secret. Create a Pod named secret-pod of image busybox:1.31.1 which should keep running for some time, it should be able to run on master nodes as well.</p>
+<p>There is an existing Secret located at /opt/course/19/secret1.yaml, create it in the secret Namespace and mount it readonly into the Pod at /tmp/secret1.</p>
+<p>Create a new Secret in Namespace secret called secret2 which should contain user=user1 and pass=1234. These entries should be available inside the Pod's container as environment variables APP_USER and APP_PASS.</p>
+<p>Confirm everything is working.</p>
 </summary>
 <p>
 
 ```bash
 
-```
-</p>
-</details>
-
-<details><summary>
-2of4 Test the NodePort Service using the internal IP of all available nodes and the port 30100 using curl, you can reach the internal node IPs directly from your main terminal. 
-</summary>
-<p>
-  
-```bash
-#must know for ports!: https://nigelpoulton.com/explained-kubernetes-service-ports/?force_isolation=true
-k -n jupiter run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 jupiter-crew-svc:8080 #ClusterIP svc is still internally reachable
-```
-</p>
-</details>
-
-<details><summary>
-3of4 On which nodes is the Service reachable? 
-</summary>
-<p>
-  
-```bash
-k get nodes -o wide #get <masterIP> and <workerIP> for testing whether svc is reachable
-curl <masterIP>:30100 && curl <workerIP>:30100 # html><body><h1>It works!</h1></body></html>
-```
-</p>
-</details>
-
-<details><summary>
-4of4 On which node is the Pod running?
-</summary>
-<p>
-  
-```bash
-k -n jupiter get pod jupiter-crew-deploy-<dep>-<pod> -o yaml | grep nodeName #confirm which node pod runs on
 ```
 </p>
 </details>

@@ -12,7 +12,9 @@ https://killer.sh/dashboard
 <p>
   
 ```bash
-
+k config get-contexts -o name > /opt/course/1/contexts
+echo -e 'kubectl config current-context' > /opt/course/1/context_default_kubectl.sh
+echo -e 'cat ~/.kube/config | grep current | sed -e "s/current-context: //"' > /opt/course/1/context_default_no_kubectl.sh
 ```
 </p>
 </details>

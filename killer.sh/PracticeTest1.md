@@ -232,17 +232,18 @@ dns: [TYPE] [NAME]
 </p>
 </details>
 
-### Q15 | ConfigMap, Configmap-Volume ###
+### Q15 | 3% ###
 <details><summary>
-Team Moonpie has a nginx server Deployment called web-moon in Namespace moon. Someone started configuring it but it was never completed. To complete please create a ConfigMap called configmap-web-moon-html containing the content of file /opt/course/15/web-moon.html under the data key-name index.html.
-The Deployment web-moon is already configured to work with this ConfigMap and serve its content. Test the nginx configuration for example using curl from a temporary nginx:alpine Pod.
+<p>Use context: kubectl config use-context k8s-c2-AC</p>
+<p>Write a command into /opt/course/15/cluster_events.sh which shows the latest events in the whole cluster, ordered by time. Use kubectl for it.</p>
+<p>Now kill the kube-proxy Pod running on node cluster2-worker1 and write the events this caused into /opt/course/15/pod_kill.log.</p>
+<p>Finally kill the containerd container of the kube-proxy Pod on node cluster2-worker1 and write the events into /opt/course/15/container_kill.log.</p>
+<p>Do you notice differences in the events both actions caused?</p>
 </summary>
 <p>
   
 ```bash
-k -n moon create configmap configmap-web-moon-html --from-file=index.html=/opt/course/15/web-moon.html
-k -n moon rollout restart deploy web-moon # MAY need to delete/recreate for pods to deploy
-k -n `ns` run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 "ClusterIP from 'k -n `ns` get pod -o wide'"
+
 ```
 </p>
 </details>

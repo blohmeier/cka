@@ -266,7 +266,7 @@ k get po -o wide | grep schedule #confirm both pods running - i.e. scheduler bac
 </p>
 </details>
 
-### Q10 | 6% ###
+### Q10 | RBAC ServiceAccount Role RoleBinding | 6% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>Create a new ServiceAccount processor in Namespace project-hamster. Create a Role and RoleBinding, both named processor as well. These should allow the new SA to only create Secrets and ConfigMaps in that Namespace.</p>
@@ -274,7 +274,10 @@ k get po -o wide | grep schedule #confirm both pods running - i.e. scheduler bac
 <p>
   
 ```bash
-
+k -n project-hamster create sa processor
+k -n project-hamster create role accessor --verb=create --resource=secret --resource=configmap
+k -n project-hamster create rolebinding processor --role processor --serviceaccount project-hamster:processor #bind role to sa
+k auth can-i -h #examples of tests for new rolebinding
 ```
 </p>
 </details>

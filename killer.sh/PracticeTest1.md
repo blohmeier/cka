@@ -296,7 +296,7 @@ dns: [TYPE] [NAME]
 
 ### Q19 | 3% ###
 <details><summary>
-*this task can only be solved if questions 18 or 20 have been successfully implemented and the k8s-c3-CCC cluster has a functioning worker node*
+**this task can only be solved if questions 18 or 20 have been successfully implemented and the k8s-c3-CCC cluster has a functioning worker node**
 <p>Use context: kubectl config use-context k8s-c3-CCC</p>
 <p>Do the following in a new Namespace secret. Create a Pod named secret-pod of image busybox:1.31.1 which should keep running for some time, it should be able to run on master nodes as well.</p>
 <p>There is an existing Secret located at /opt/course/19/secret1.yaml, create it in the secret Namespace and mount it readonly into the Pod at /tmp/secret1.</p>
@@ -311,80 +311,24 @@ dns: [TYPE] [NAME]
 </p>
 </details>
 
-### Q20 | NetworkPolicy ###
+### Q20 | 10% ###
 <details><summary>
-1of2 In Namespace venus you'll find two Deployments named api and frontend. Both Deployments are exposed inside the cluster using Services. Create a NetworkPolicy named np1 which restricts outgoing tcp connections from Deployment frontend and only allows those going to Deployment api. Make sure the NetworkPolicy still allows outgoing traffic on UDP/TCP ports 53 for DNS resolution.
+<p>Use context: kubectl config use-context k8s-c3-CCC</p>
+<p>Your coworker said node cluster3-worker2 is running an older Kubernetes version and is not even part of the cluster. Update Kubernetes on that node to the exact version that's running on cluster3-master1. Then add this node to the cluster. Use kubeadm for this.</p>
 </summary>
 <p>
   
 ```bash
-k -n venus exec frontend-<dep>-<pod> -- wget -T 10 -O- www.google.com #works
-k -n venus exec frontend-<dep>-<pod> -- wget -T 10 -O- api:2222 #works
-vim 20_netpol.yml #copy from documentation and edit as shown
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: np1
-  namespace: venus
-spec:
-  podSelector:
-    matchLabels:
-      id: frontend    # label of the pods to which this policy applies
-  policyTypes:
-  - Egress            # only control egress
-  egress:
-  - to:               # rule 1 - egress only to pods with api label
-    - podSelector:   
-        matchLabels:
-          id: api
-  - ports:            # rule 2 - UDP/TCP DNS on port 53 ("-" = OR (without, these would be 1 rule)).
-    - port: 53        
-      protocol: UDP
-    - port: 53        
-      protocol: TCP
-k create -f 20_netpol.yml
-```
-</p>
-</details>
-
-<details><summary>
-2of2 Test using: wget www.google.com and wget api:2222 from a Pod of Deployment frontend.
-</summary>
-<p>
-  
-```bash
-k -n venus exec frontend-<dep>-<pod> -- wget -T 10 -O- www.google.com #no longer working
-k -n venus exec frontend-<dep>-<pod> -- wget -T 10 -O- api:2222 #works
-```
-</p>
-</details>
-
-### Q21 | Requests and Limits, ServiceAccount ###
-<details><summary>
-Team Neptune needs 3 Pods of image httpd:2.4-alpine, create a Deployment named neptune-10ab for this. The containers should be named neptune-pod-10ab. Each container should have a memory request of 20Mi and a memory limit of 50Mi. Team Neptune has its own ServiceAccount neptune-sa-v2 under which the Pods should run. The Deployment should be in Namespace neptune.
-</summary>
-<p>
-  
-```bash
-k -n neptune create deploy neptune-10ab --image=httpd:2.4-alpine --replicas=3 $dy > 21.yaml
-vim 21.yml
-#spec.template.spec:
-serviceAccountName: neptune-sa-v2 
-#spec.template.spec.containers:
-name: neptune-pod-10ab  # change
-resources:              # add
-  limits:               # add
-    memory: 50Mi        # add
-  requests:             # add
-    memory: 20Mi        # add
 
 ```
 </p>
 </details>
 
-### Q22 | Labels, Annotations ###
+### Q21 | 2% ###
 <details><summary>
-Team Sunny needs to identify some of their Pods in namespace sun. They ask you to add a new label protected: true to all Pods with an existing label type: worker or type: runner. Also add an annotation protected: do not delete this pod to all Pods having the new label protected: true.
+<p>Use context: kubectl config use-context k8s-c3-CCC</p>
+<p>Your coworker said node cluster3-worker2 is running an older Kubernetes version and is not even part of the cluster. Update Kubernetes on that node to the exact version that's running on cluster3-master1. Then add this node to the cluster. Use kubeadm for this.</p>
+<p>Your coworker said node cluster3-worker2 is running an older Kubernetes version and is not even part of the cluster. Update Kubernetes on that node to the exact version that's running on cluster3-master1. Then add this node to the cluster. Use kubeadm for this.</p>
 </summary>
 <p>
   

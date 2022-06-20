@@ -26,58 +26,20 @@ https://killer.sh/dashboard
 <p>
   
 ```bash
-k run pod1 --image=httpd:2.4.41-alpine $dy > 2.yaml
-vim 2.yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  creationTimestamp: null
-  labels:
-    run: pod1
-  name: pod1
-spec:
-  containers:
-  - image: httpd:2.4.41-alpine
-    name: pod1-container # change
-k create -f 2.yml
-k get pod pod1 -o jsonpath="{.status.phase}" > /opt/course/2/pod1-status-command.sh
+
 ```
 </p>
 </details>
 
-### Q3 | Job ###
+### Q3 | 1% ###
 <details><summary>
-Team Neptune needs a Job template located at /opt/course/3/job.yaml. This Job should run image busybox:1.31.0 and execute sleep 2 && echo done. It should be in namespace neptune, run a total of 3 times and should execute 2 runs in parallel.
-Start the Job and check its history. Each pod created by the Job should have the label id: awesome-job. The job should be named neb-new-job and the container neb-new-job-container.
+<p> Use context: kubectl config use-context k8s-c1-H </p>
+<p> There are two Pods named o3db-* in Namespace project-c13. C13 management asked you to scale the Pods down to one replica to save resources. Record the action. </p>
 </summary>
 <p>
   
 ```bash
-k -n neptune create job neb-new-job --image=busybox:1.31.0 $dy > /opt/course/3/job.yaml -- sh -c "sleep 2 && echo done"
-vim /opt/course/3/job.yaml
-apiVersion: batch/v1
-kind: Job
-metadata:
-  creationTimestamp: null
-  name: neb-new-job
-  namespace: neptune      # add
-spec:
-  completions: 3          # add
-  parallelism: 2          # add
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:             # add
-        id: awesome-job   # add
-    spec:
-      containers:
-      - command:
-        - sh
-        - -c
-        - sleep 2 && echo done
-        image: busybox:1.31.0
-        name: neb-new-job-container # update
-k create -f /opt/course/3/job.yaml
+
 ```
 </p>
 </details>

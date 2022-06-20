@@ -172,24 +172,17 @@ dns: [TYPE] [NAME]
 </p>
 </details>
 
-### Q12 | Storage, PV, PVC, Pod volume ###
+### Q12 | 6% ###
 <details><summary>
-<p>Create a new PersistentVolume named earth-project-earthflower-pv. It should have a capacity of 2Gi, accessMode ReadWriteOnce, hostPath /Volumes/Data and no storageClassName defined.</p>
-<p>Next create a new PersistentVolumeClaim in Namespace earth named earth-project-earthflower-pvc . It should request 2Gi storage, accessMode ReadWriteOnce and should not define a storageClassName. The PVC should bound to the PV correctly.</p>
-<p>Finally create a new Deployment project-earthflower in Namespace earth which mounts that volume at /tmp/project-data. The Pods of that Deployment should be of image httpd:2.4.41-alpine.</p>
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>Use Namespace project-tiger for the following. Create a Deployment named deploy-important with label id=very-important (the Pods should also have this label) and 3 replicas. It should contain two containers, the first named container1 with image nginx:1.17.6-alpine and the second one named container2 with image kubernetes/pause.</p>
+<p>There should be only ever one Pod of that Deployment running on one worker node. We have two worker nodes: cluster1-worker1 and cluster1-worker2. Because the Deployment has three replicas the result should be that on both nodes one Pod is running. The third Pod won't be scheduled, unless a new worker node will be added.</p>
+<p>In a way we kind of simulate the behaviour of a DaemonSet here, but using a Deployment and a fixed number of replicas.</p>
 </summary>
 <p>
   
 ```bash
-#vim to edit/modify: 
-  12_pv.yml, 12_pvc.yml: https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/#create-a-persistentvolume (link within https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes)
-  12_dep.yml: application/wordpress/mysql-deployment.yaml (at https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/)
-  
-k create -f 12_pv.yml
-k create -f 12_pvc.yml
-k -n earth get pv,pvc #STATUS: Bound
-k create -f 12_dep.yml
-k -n earth describe pod project-earthflower-<deployID>-<podID> | grep -A2 Mounts: #verify
+
 ```
 </p>
 </details>

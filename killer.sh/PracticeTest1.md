@@ -280,47 +280,29 @@ dns: [TYPE] [NAME]
 </p>
 </details>
 
-### Q18 | Service misconfiguration ###
+### Q18 | 8% ###
 <details><summary>
-There seems to be an issue in Namespace mars where the ClusterIP service manager-api-svc should make the Pods of Deployment manager-api-deployment available inside the cluster.
-You can test this with curl manager-api-svc.mars:4444 from a temporary nginx:alpine Pod. Check for the misconfiguration and apply a fix.
+<p>Use context: kubectl config use-context k8s-c3-CCC</p>
+<p>There seems to be an issue with the kubelet not running on cluster3-worker1. Fix it and confirm that cluster has node cluster3-worker1 available in Ready state afterwards. You should be able to schedule a Pod on cluster3-worker1 afterwards.</p>
+<p>Write the reason of the issue into /opt/course/18/reason.txt.</p>
 </summary>
 <p>
   
 ```bash
-1of2:Diagnose
-k -n mars get all #All pods STATUS: "Running"; gets you svc NAME:PORT and CLUSTER-IP for later
-k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 manager-api-svc:4444 #can't connect to svc
-k -n mars get ep #no eps
-k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 <test cluster IP> #pod connects
+
 ```
 </p>
 </details>
 
-<details><summary> ... apply a fix.
-</summary>
-<p>
-  
-```bash
-2of2
-k -n mars edit svc #spec.selector should be manager-api-pod
-k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 manager-api-svc:4444 #svc works now
-k -n mars get ep #eps show now
-```
-</p>
-</details>
-
-### Q19 | Service ClusterIP->NodePort ###
+### Q19 | 3% ###
 <details><summary>
-1of4 In Namespace jupiter you'll find an apache Deployment (with one replica) named jupiter-crew-deploy and a ClusterIP Service called jupiter-crew-svc which exposes it. Change this service to a NodePort one to make it available on all nodes on port 30100.
+*this task can only be solved if questions 18 or 20 have been successfully implemented and the k8s-c3-CCC cluster has a functioning worker node*
+<p>Use context: kubectl config use-context k8s-c3-CCC</p>
 </summary>
 <p>
 
 ```bash
-k -n jupiter run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 jupiter-crew-svc:8080 #ClusterIP svc jupiter-crew-svc does work
-k -n jupiter edit svc jupiter-crew-svc
-nodePort: 30100 #spec.ports
-type: NodePort #spec
+
 ```
 </p>
 </details>

@@ -91,7 +91,7 @@ k run am-i-ready --image=nginx:1.16.1-alpine --labels="id=cross-server-ready"
 </p>
 </details>
 
-### Q5 | 1% ###
+### Q5 | Kubectl sorting | 1% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>There are various Pods in all namespaces. Write a command into /opt/course/5/find_pods.sh which lists all Pods sorted by their AGE (metadata.creationTimestamp).</p>
@@ -106,7 +106,7 @@ echo -e 'kubectl get pod -A --sort-by=.metadata.uid' > /opt/course/5/find_pods_u
 </p>
 </details>
 
-### Q6 | 8% ###
+### Q6 | Storage, PV, PVC, Pod volume | 8% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>Create a new PersistentVolume named safari-pv. It should have a capacity of 2Gi, accessMode ReadWriteOnce, hostPath /Volumes/Data and no storageClassName defined.</p>
@@ -116,7 +116,63 @@ echo -e 'kubectl get pod -A --sort-by=.metadata.uid' > /opt/course/5/find_pods_u
 <p>
   
 ```bash
+vim 6_pv_pvc_dep.yml
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+ name: safari-pv
+spec:
+ capacity:
+  storage: 2Gi
+ accessModes:
+  - ReadWriteOnce
+ hostPath:
+  path: "/Volumes/Data"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: safari-pvc
+  namespace: project-tiger
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+     storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: safari
+  name: safari
+  namespace: project-tiger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: safari
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: safari
+    spec:
+      volumes:                                      # add
+      - name: data                                  # add
+        persistentVolumeClaim:                      # add
+          claimName: safari-pvc                     # add
+      containers:
+      - image: httpd:2.4.41-alpine
+        name: container
+        volumeMounts:                               # add
+        - name: data                                # add
+          mountPath: /tmp/safari-data               # add
 
+k create -f 6_pv_pvc_dep.yml
 ```
 </p>
 </details>

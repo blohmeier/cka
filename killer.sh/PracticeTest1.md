@@ -267,44 +267,16 @@ dns: [TYPE] [NAME]
 ### Q17 | 3% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>In Namespace project-tiger create a Pod named tigers-reunite of image httpd:2.4.41-alpine with labels pod=container and container=pod. Find out on which node the Pod is scheduled. Ssh into that node and find the containerd container belonging to that Pod.</p>
+<p>Using command crictl:</p>
+<p>1. Write the ID of the container and the info.runtimeType into /opt/course/17/pod-container.txt</p>
+<p>2. Write the logs of the container into /opt/course/17/pod-container.log</p>
 </summary>
 <p>
 
 ```bash
-cp /opt/course/17/test-init-container.yaml ~/17_test-init-container.yaml
-vim 17_test-init-container.yaml #add below under spec.template.spec:
-initContainers:
-- name: init-con
-  image: busybox:1.31.0
-  command: ['sh', '-c', 'echo "check this out!" > /tmp/web-content/index.html']
-  volumeMounts:
-  - name: web-content
-    mountPath: /tmp/web-content
-k create -f 17_test-init-container.yaml
-```
-</p>
-</details>
-
-<details><summary>
-2of2 Test your implementation for example using curl from a temporary nginx:alpine Pod.
-</summary>
-
-```bash
-k -n mars get pod -o wide # get <test cluster IP>
-k run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 10 <test cluster IP>
-```
-NOTE: Path (to index.html in "command") and initContainers.volumeMounts.mountPath must agree but NEED NOT BE identical to answer above. Just don't put mountPath at root! Example:
 
 ```
-initContainers:
-- image: busybox:1.31.0
-  name: init-con
-  command: ['sh', '-c', 'echo "check this out!" > /test1/index.html']
-  volumeMounts:
-  - name: web-content
-    mountPath: /test1
-```
-
 </p>
 </details>
 

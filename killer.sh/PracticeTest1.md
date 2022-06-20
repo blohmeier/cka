@@ -159,28 +159,15 @@ dns: [TYPE] [NAME]
 </p>
 </details>
 
-### Q11 | Working with Containers ###
+### Q11 | 4% ###
 <details><summary>
-During the last monthly meeting you mentioned your strong expertise in container technology. Now the Build&Release team of department Sun is in need of your insight knowledge. There are files to build a container image located at /opt/course/11/image. The container will run a Golang application which outputs information to stdout. You're asked to perform the following tasks:
-<ol><li>Change the Dockerfile. The value of the environment variable SUN_CIPHER_ID should be set to the hardcoded value 5b9c1065-e39d-4a43-a04a-e59bcea3e03f</li>
-<li>Build the image using Docker, named registry.killer.sh:5000/sun-cipher, tagged as latest and v1-docker, push these to the registry</li>
-<li>Build the image using Podman, named registry.killer.sh:5000/sun-cipher, tagged as v1-podman, push it to the registry</li>
-<li>Run a container using Podman, which keeps running in the background, named sun-cipher using image registry.killer.sh:5000/sun-cipher:v1-podman. Run the container from k8s@terminal and not root@terminal</li>
-<li>Write the logs your container sun-cipher produced into /opt/course/11/logs. Then write a list of all running Podman containers into /opt/course/11/containers</li></ol>
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>Use Namespace project-tiger for the following. Create a DaemonSet named ds-important with image httpd:2.4-alpine and labels id=ds-important and uuid=18426a0b-5f59-4e10-923f-c0e078e82462. The Pods it creates should request 10 millicore cpu and 10 mebibyte memory. The Pods of that DaemonSet should run on all nodes, master and worker.</p>
 </summary>
 <p>
   
 ```bash
-# change line per step 1. Next:
-sudo docker build -t registry.killer.sh:5000/sun-cipher:latest -t registry.killer.sh:5000/sun-cipher:v1-docker .
-sudo docker push registry.killer.sh:5000/sun-cipher:latest
-sudo docker push registry.killer.sh:5000/sun-cipher:v1-docker
-podman build -t registry.killer.sh:5000/sun-cipher:v1-podman .
-podman push registry.killer.sh:5000/sun-cipher:v1-podman
-su - k8s #only if not already k8s@terminal. Or can just 'exit' from root. To go back to root, sudo su w/no pw.
-podman run -d --name sun-cipher registry.killer.sh:5000/sun-cipher:v1-podman
-podman ps > /opt/course/11/containers
-podman logs sun-cipher > /opt/course/11/logs
+
 ```
 </p>
 </details>

@@ -125,44 +125,23 @@ dns: [TYPE] [NAME]
 <p>
   
 ```bash
-k -n neptune rollout history deploy api-new-c32
-k -n neptune get deploy,pod | grep api-new-c32
-k -n neptune describe pod api-new-c32-7d64747c87-zh648 | grep -i error; k -n neptune describe pod api-new-c32-7d64747c87-zh648 | grep -i image
-k -n neptune rollout undo deploy api-new-c32
+
 ```
 </p>
 </details>
 
-### Q9 | Pod -> Deployment ###
+### Q9 | 5% ###
 <details><summary>
-<p>In Namespace pluto there is single Pod named holy-api. It has been working okay for a while now but Team Pluto needs it to be more reliable. Convert the Pod into a Deployment with 3 replicas and name holy-api. The raw Pod template file is available at /opt/course/9/holy-api-pod.yaml.</p>
-<p>In addition, the new Deployment should set allowPrivilegeEscalation: false and privileged: false for the security context on container level.</p>
-<p>Please create the Deployment and save its yaml under /opt/course/9/holy-api-deployment.yaml.</p>
+<p>Use context: kubectl config use-context k8s-c2-AC</p>
+<p>Ssh into the master node with ssh cluster2-master1. Temporarily stop the kube-scheduler, this means in a way that you can start it again afterwards.</p>
+<p>Create a single Pod named manual-schedule of image httpd:2.4-alpine, confirm its created but not scheduled on any node.</p>
+<p>Now you're the scheduler and have all its power, manually schedule that Pod on node cluster2-master1. Make sure it's running.</p>
+<p>Start the kube-scheduler again and confirm its running correctly by creating a second Pod named manual-schedule2 of image httpd:2.4-alpine and check if it's running on cluster2-worker1.</p>
 </summary>
 <p>
 
 ```bash
-add below from _`Deployment`_ example yaml.
-cp /opt/course/9/holy-api-pod.yaml /opt/course/9/holy-api-deployment.yaml
-vim /opt/course/9/holy-api-deployment.yaml #
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: holy-api        # name stays the same
-  namespace: pluto      # important
-spec:
-  replicas: 3           # 3 replicas
-  selector:
-    matchLabels:
-      id: holy-api      # set the correct selector
-  template:
-    # => from here down its the same as the pods metadata: and spec: sections
-#add spec.template.spec.containers.securityContext and indented from that add:
-  allowPrivilegeEscalation: false  # add
-  privileged: false                # add
 
-k -f create /opt/course/9/holy-api-deployment.yaml
-k -n pluto delete pod holy-api $fg
 ```
 </p>
 </details>

@@ -187,17 +187,19 @@ dns: [TYPE] [NAME]
 </p>
 </details>
 
-### Q13 | Storage, StorageClass, PVC ###
+### Q13 | 4% ###
 <details><summary>
-Team Moonpie, which has the Namespace moon, needs more storage. Create a new PersistentVolumeClaim named moon-pvc-126 in that namespace. This claim should use a new StorageClass moon-retain with the provisioner set to moon-retainer and the reclaimPolicy set to Retain. The claim should request storage of 3Gi, an accessMode of ReadWriteOnce and should use the new StorageClass.
-The provisioner moon-retainer will be created by another team, so it's expected that the PVC will not boot yet. Confirm this by writing the log message from the PVC into file /opt/course/13/pvc-126-reason.
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>Create a Pod named multi-container-playground in Namespace default with three containers, named c1, c2 and c3. There should be a volume attached to that Pod and mounted into every container, but the volume shouldn't be persisted or shared with other Pods.</p>
+<p>Container c1 should be of image nginx:1.17.6-alpine and have the name of the node where its Pod is running available as environment variable MY_NODE_NAME.</p>
+<p>Container c2 should be of image busybox:1.31.1 and write the output of the date command every second in the shared volume into file date.log. You can use while true; do date >> /your/vol/path/date.log; sleep 1; done for this.</p>
+<p>Container c3 should be of image busybox:1.31.1 and constantly send the content of file date.log from the shared volume to stdout. You can use tail -f /your/vol/path/date.log for this.</p>
+<p>Check the logs of container c3 to confirm correct setup.</p>
 </summary>
 <p>
   
 ```bash
-#edit and "k create -f" for sc from template at https://kubernetes.io/docs/concepts/storage/storage-classes/
-#edit and "k create -f" for pvc from template at https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/#create-a-persistentvolume (link within https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistent-volumes)
-k -n moon describe pvc moon-pvc-126 # and paste "Events:" text sentence into /opt/course/13/pvc-126-reason
+
 ```
 </p>
 </details>

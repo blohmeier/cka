@@ -44,21 +44,17 @@ https://killer.sh/dashboard
 </p>
 </details>
 
-### Q4 | Helm Management ###
+### Q4 | 4% ###
 <details><summary>
-Team Mercury asked you to perform some operations using Helm, all in Namespace mercury:
-<p>1. Delete release internal-issue-report-apiv1</p>
-<p>2. Upgrade release internal-issue-report-apiv2 to any newer version of chart bitnami/nginx available</p>
-<p>3. Install a new release internal-issue-report-apache of chart bitnami/apache. The Deployment should have two replicas, set these via Helm-values during install</p>
-<p>4. There seems to be a broken release, stuck in pending-install state. Find it and delete it</p>
+<p>Use context: kubectl config use-context k8s-c1-H</p>
+<p>Do the following in Namespace default. Create a single Pod named ready-if-service-ready of image nginx:1.16.1-alpine. Configure a LivenessProbe which simply runs true. Also configure a ReadinessProbe which does check if the url http://service-am-i-ready:80 is reachable, you can use wget -T2 -O- http://service-am-i-ready:80 for this. Start the Pod and confirm it isn't ready because of the ReadinessProbe.</p>
+<p>Create a second Pod named am-i-ready of image nginx:1.16.1-alpine with label id: cross-server-ready. The already existing Service service-am-i-ready should now have that second Pod as endpoint.</p>
+<p>Now the first Pod should be in ready state, confirm that.</p>
 </summary>
 <p>
   
 ```bash
-helm -n mercury uninstall internal-issue-report-apiv1
-helm repo list; helm repo update; helm search repo nginx; helm -n mercury upgrade internal-issue-report-apiv2 bitnami/nginx
-![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `helm show values bitnami/apache | yq e `; helm -n mercury install internal-issue-report-apache bitnami/apache --set replicaCount=2; k -n mercury get deploy internal-issue-report-apache
-helm -n mercury list -a | helm -n mercury uninstall internal-issue-report-daniel
+
 ```
 </p>
 </details>

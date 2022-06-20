@@ -2,9 +2,6 @@
 https://killer.sh/dashboard
 
 </p></details>
-
-<details><summary>vim config</summary>
-<p>
   
 ### Q1 | 1% ###
 <details><summary>

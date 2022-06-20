@@ -338,49 +338,12 @@ dns: [TYPE] [NAME]
 </p>
 </details>
 
-### Preview Question 1 ###
+### Q22 | 2% ###
 <details><summary>
-In Namespace pluto there is a Deployment named project-23-api. It has been working okay for a while but Team Pluto needs it to be more reliable. Implement a liveness-probe which checks the container to be reachable on port 80. Initially the probe should wait 10, periodically 15 seconds.
-The original Deployment yaml is available at /opt/course/p1/project-23-api.yaml. Save your changes at /opt/course/p1/project-23-api-new.yaml and apply the changes.
-</summary>
-<p>
-  
-```bash
-cp /opt/course/p1/project-23-api.yaml /opt/course/p1/project-23-api-new.yaml
-vim /opt/course/p1/project-23-api-new.yaml #add below under under spec.template.spec.containers
-livenessProbe:
-  tcpSocket:
-    port: 80
-  initialDelaySeconds: 10
-  periodSeconds: 15
-k delete deploy -n pluto project-23-api 
-k create -f /opt/course/p1/project-23-api-new.yaml
-```
-</p>
-</details>
-
-### Preview Question 2 ###
-<details><summary>
-Team Sun needs a new Deployment named sunny with 4 replicas of image nginx:1.17.3-alpine in Namespace sun. The Deployment and its Pods should use the existing ServiceAccount sa-sun-deploy.
-Expose the Deployment internally using a ClusterIP Service named sun-srv on port 9999. The nginx containers should run as default on port 80. The management of Team Sun would like to execute a command to check that all Pods are running on occasion. Write that command into file /opt/course/p2/sunny_status_command.sh. The command should use kubectl.
-</summary>
-<p>
-  
-```bash
-k create deploy sunny -n sun --image=nginx:1.17.3-alpine --replicas=4 $dy > pq2.ym
-pq2.yml
-vim pq2.yml # add "serviceAccountName: sa-sun-deploy" under spec.template.spec
-k create -f pq2.yml
-k expose deploy -n sun sunny --type=ClusterIP --port=80 --target-port=9999 --name=sun-srv
-echo "kubectl get pods -l app=sunny -n sun" > /opt/course/p2/sunny_status_command.sh
-```
-</p>
-</details>
-
-### Preview Question 3 ###
-<details><summary>
-Management of EarthAG recorded that one of their Services stopped working. Dirk, the administrator, left already for the long weekend. All the information they could give you is that it was located in Namespace earth and that it stopped working after the latest rollout. All Services of EarthAG should be reachable from inside the cluster.
-Find the Service, fix any issues and confirm its working again. Write the reason of the error into file /opt/course/p3/ticket-654.txt so Dirk knows what the issue was.
+<p>Use context: kubectl config use-context k8s-c2-AC</p>
+<p>Check how long the kube-apiserver server certificate is valid on cluster2-master1. Do this with openssl or cfssl. Write the exipiration date into /opt/course/22/expiration.</p>
+<p>Also run the correct kubeadm command to list the expiration dates and confirm both methods show the same date.</p>
+<p>Write the correct kubeadm command that would renew the apiserver server certificate into /opt/course/22/kubeadm-renew-certs.sh.</p>
 </summary>
 <p>
   

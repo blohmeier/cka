@@ -490,7 +490,7 @@ find /etc/cni/net.d/; cat /etc/cni/net.d/10-weave.conflist #for #4
 </p>
 </details>
 
-### Q15 | 3% ###
+### Q15 | Cluster Event Logging | 3% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c2-AC</p>
 <p>Write a command into /opt/course/15/cluster_events.sh which shows the latest events in the whole cluster, ordered by time. Use kubectl for it.</p>
@@ -501,12 +501,16 @@ find /etc/cni/net.d/; cat /etc/cni/net.d/10-weave.conflist #for #4
 <p>
   
 ```bash
-
+echo -e 'kubectl get events -A --sort-by=.metadata.creationTimestamp' >> /opt/course/15/cluster_events.sh
+k -n kube-system delete pod <pod running on cluster2-worker1 as per command: k -n kube-system get pod -o wide | grep proxy> $fg
+sh /opt/course/15/cluster_events.sh >> /opt/course/15/pod_kill.log
+ssh cluster2-worker1; crictl ps | grep kube-proxy #record CONTAINER name for next command; critcl stop/rm <CONTAINER name from prev command>; crictl ps | grep kube-proxy #confirm new container was created; exit
+sh /opt/course/15/cluster_events.sh >> /opt/course/15/container_kill.log #write new events into second file
 ```
 </p>
 </details>
 
-### Q16 | 2% ###
+### Q16 | Namespaces and Api Resources | 2% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>Create a new Namespace called cka-master.</p>

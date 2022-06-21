@@ -457,7 +457,7 @@ k logs multi-container-playground -c c3 #logs show output of date command
 </p>
 </details>
 
-### Q14 | 2% ###
+### Q14 | Find out Cluster Info | 2% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>You're ask to find out following information about the cluster k8s-c1-H:</p>
@@ -480,6 +480,11 @@ k logs multi-container-playground -c c3 #logs show output of date command
 <p>
   
 ```bash
+k get no #for 1 and 2
+ssh cluster1-master1; cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep range #for 3
+#note: don't exit master node yet!
+find /etc/cni/net.d/; cat /etc/cni/net.d/10-weave.conflist #for #4
+#for 5, 'suffix' is the node hostname with a leading hyphen
 
 ```
 </p>

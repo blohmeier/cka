@@ -520,13 +520,16 @@ sh /opt/course/15/cluster_events.sh >> /opt/course/15/container_kill.log #write 
 <p>
   
 ```bash
-
+k create ns cka-master
+k api-resources --namespaced -o name > /opt/course/16/resources.txt
+k get ns; k -n project-* get role --no-headers | wc -l #reveals out of 5 ns (c13, c14, hamster, snake, tiger), -n project-c14 has most Roles
+echo -e 'project-c14 with 300 resources' >> /opt/course/16/crowded-namespace.txt
 ```
 </p>
 </details>
 
 
-### Q17 | 3% ###
+### Q17 | Find Container of Pod and check info | 3% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>In Namespace project-tiger create a Pod named tigers-reunite of image httpd:2.4.41-alpine with labels pod=container and container=pod. Find out on which node the Pod is scheduled. Ssh into that node and find the containerd container belonging to that Pod.</p>

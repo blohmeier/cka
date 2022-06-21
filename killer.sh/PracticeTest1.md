@@ -299,6 +299,43 @@ k -n project-hamster auth can-i get configmap --as system:serviceaccount:project
 #can't create ds directly, so create deploy and edit it into a ds:
 k -n project-tiger create deploy --image=httpd:2.4-alpine ds-important $dy > 11.yml
 vim 11.yml
+#remove: .spec.replicas, .spec.strategy, .status
+#change/add as shown:
+apiVersion: apps/v1
+kind: DaemonSet                                     # changed from kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:                                           # add
+    id: ds-important                                # changed from app: ds-important
+    uuid: 18426a0b-5f59-4e10-923f-c0e078e82462      # add
+  name: ds-important
+  namespace: project-tiger                          # add
+spec:
+  selector:
+    matchLabels:
+      id: ds-important                              # add
+      uuid: 18426a0b-5f59-4e10-923f-c0e078e82462    # add
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        id: ds-important                            # add
+        uuid: 18426a0b-5f59-4e10-923f-c0e078e82462  # add
+    spec:
+      containers:
+      - image: httpd:2.4-alpine
+        name: ds-important
+        resources:
+          requests:                                 # add
+            cpu: 10m                                # add
+            memory: 10Mi                            # add
+      tolerations:                                  # add
+      - effect: NoSchedule                          # add
+        key: node-role.kubernetes.io/master         # add
+k create -f 11.yml
+#confirm ds runs on all nodes
+k -n project-tiger get ds
+k -n project-tiger get pod -l id=ds-important -o wide
 ```
 </p>
 </details>

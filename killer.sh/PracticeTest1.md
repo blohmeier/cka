@@ -4,6 +4,12 @@ https://killer.sh/dashboard
 DON'T UNDERSTAND: 
 8
 11
+
+EXPIREABLE:
+17 (Last item)
+18 (Last item)
+21 (all items)
+
 </p></details>
   
 ### Q1 | Contexts | 1% ###
@@ -701,6 +707,9 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
+
+#NO NEED to do below because is created automatically???
+k create -f /etc/kubernetes/manifests/my-static-pod.yml
 
 exit; k get pod -A | grep my-static #confirm is running
 k expose pod my-static-pod-cluster3-master1 --name static-pod-service --type=NodePort --port 80

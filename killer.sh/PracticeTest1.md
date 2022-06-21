@@ -681,12 +681,36 @@ k get no #reveals cluster3-worker2 has been added to cluster and is up to date
 <p>
   
 ```bash
+ssh cluster3-master1
+kubectl run my-static-pod --image=nginx:1.16-alpine --dry-run=client -o yaml > /etc/kubernetes/manifests/my-static-pod.yml #edit as shown below
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: my-static-pod
+  name: my-static-pod
+spec:
+  containers:
+  - image: nginx:1.16-alpine
+    name: my-static-pod
+    resources:                #edit
+      requests:               #add start
+        cpu: 10m
+        memory: 20Mi          #add end
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+exit; k get pod -A | grep my-static #confirm is running
+k expose pod my-static-pod-cluster3-master1 --name static-pod-service --type=NodePort --port 80
+k get svc,ep -l run=my-static-pod
 
 ```
 </p>
 </details>
 
-### Q22 | 2% ###
+### Q22 | Check how long certificates are valid | 2% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c2-AC</p>
 <p>Check how long the kube-apiserver server certificate is valid on cluster2-master1. Do this with openssl or cfssl. Write the exipiration date into /opt/course/22/expiration.</p>

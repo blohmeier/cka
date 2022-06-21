@@ -540,7 +540,14 @@ echo -e 'project-c14 with 300 resources' >> /opt/course/16/crowded-namespace.txt
 <p>
 
 ```bash
-
+k -n project-tiger run tigers-reunite --image=httpd:2.4.41-alpine --labels "pod=container,container=pod"
+k -n project-tiger get pod tigers-reunite -o jsonpath="{.spec.nodeName}" #or just k -n project-tiger get pod -o wide and check for the tigers-reunite pod
+ssh <{.spec.nodeName}> #from above command
+crictl ps | grep tigers-reunite #get CONTAINER name (aka ID) for command below and for first part of 1. MAY have to first: apt-get update; apt install crictl
+crictl inspect <CONTAINER name/ID from above> | grep runtimeType #for second part of 1.
+exit
+echo -e '<first part of 1. above> <second part of 1. above>' >> /opt/course/17/pod-container.txt
+ssh cluster1-worker2 'crictl logs <first part of 1. above>' &> /opt/course/17/pod-container.log #redirects both the standard output and standard error 
 ```
 </p>
 </details>

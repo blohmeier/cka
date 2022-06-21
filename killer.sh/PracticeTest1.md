@@ -825,14 +825,30 @@ k -n project-snake exec backend-0 -- curl -m 10 -s <IPs 1-3 from above with port
 ### Q25 | Etcd Snapshot Save and Restore | 8% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c3-CCC</p>
-<p>Make a backup of etcd running on cluster3-master1 and save it on the master node at /tmp/etcd-backup.db.</p>
-<p>Then create a Pod of your kind in the cluster./p>
-<p>Finally restore the backup, confirm the cluster is still working and that the created Pod is no longer with us.</p>
+<p>1of3 Make a backup of etcd running on cluster3-master1 and save it on the master node at /tmp/etcd-backup.db.</p>
+<p>2of3 Then create a Pod of your kind in the cluster./p>
+<p>3of3 Finally restore the backup, confirm the cluster is still working and that the created Pod is no longer with us.</p>
 </summary>
 <p>
   
 ```bash
+ssh cluster3-master1
+#TWO WAYS to get authentication info necessary to create snapshot of etcd:
+#FIRST WAY:
+cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep etcd
+#SECOND WAY:
+vim /etc/kubernetes/manifests/etcd.yaml #read from various areas of this file.
 
+#Now are ready to create snapshot:
+ETCDCTL_API=3 etcdctl snapshot save /tmp/etcd-backup.db --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key
+
+2of3
+kubectl run test --image=nginx; kubectl get pod -l run=test -w #create po and watch til it's running
+cd /etc/kubernetes/manifests/; mv * ..; watch crictl ps #stop all controlplane components
+ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd-backup.db --data-dir /var/lib/etcd-backup --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key #restore the snapshot to a specific dir.
+vim /etc/kubernetes/etcd.yaml #tell etcd to use restored files located at new dir /var/lib/etcd-backup by changing spec.volumes.hostPath for name:etcd-data to path: /var/lib/etcd-backup
+mv ../*.yaml .; watch crictl ps #move all controlplane yaml into manifest dir. Give time (could be several mins) for etcd to restart and for api-server to be reachable again.
+kubectl get pod -l run=test #confirms backup and restore worked as the pod is now gone.
 ```
 </p>
 </details>

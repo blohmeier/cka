@@ -409,7 +409,50 @@ k -n project-tiger describe pod deploy-important-5c99c99d4d-4rt9k | grep -i even
 <p>
   
 ```bash
-
+k run multi-container-playground --image=nginx:1.17.6-alpine $dy > 13.yml
+vim 13.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: multi-container-playground
+  name: multi-container-playground
+spec:
+  containers:
+  - image: nginx:1.17.6-alpine
+    name: c1                                                                      # change
+    resources: {}
+    env:                                                                          # add
+    - name: MY_NODE_NAME                                                          # add
+      valueFrom:                                                                  # add
+        fieldRef:                                                                 # add
+          fieldPath: spec.nodeName                                                # add
+    volumeMounts:                                                                 # add
+    - name: vol                                                                   # add
+      mountPath: /vol                                                             # add
+  - image: busybox:1.31.1                                                         # add
+    name: c2                                                                      # add
+    command: ["sh", "-c", "while true; do date >> /vol/date.log; sleep 1; done"]  # add
+    volumeMounts:                                                                 # add
+    - name: vol                                                                   # add
+      mountPath: /vol                                                             # add
+  - image: busybox:1.31.1                                                         # add
+    name: c3                                                                      # add
+    command: ["sh", "-c", "tail -f /vol/date.log"]                                # add
+    volumeMounts:                                                                 # add
+    - name: vol                                                                   # add
+      mountPath: /vol                                                             # add
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:                                                                        # add
+    - name: vol                                                                   # add
+      emptyDir: {}                                                                # add
+status: {}
+#confirm requirements are met:
+k get pod multi-container-playground #READY 3/3
+k exec multi-container-playground -c c1 -- env | grep MY #c1 has requested env var of "MY_NODE_NAME=spec.nodeName"
+k logs multi-container-playground -c c3 #logs show output of date command
 ```
 </p>
 </details>

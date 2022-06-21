@@ -552,7 +552,7 @@ ssh cluster1-worker2 'crictl logs <first part of 1. above>' &> /opt/course/17/po
 </p>
 </details>
 
-### Q18 | 8% ###
+### Q18 | Fix Kubelet | 8% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c3-CCC</p>
 <p>There seems to be an issue with the kubelet not running on cluster3-worker1. Fix it and confirm that cluster has node cluster3-worker1 available in Ready state afterwards. You should be able to schedule a Pod on cluster3-worker1 afterwards.</p>
@@ -561,12 +561,23 @@ ssh cluster1-worker2 'crictl logs <first part of 1. above>' &> /opt/course/17/po
 <p>
   
 ```bash
-
+k get no #reveals cluster3-worker1 node not ready
+ssh cluster3-worker1; ps aux | grep kubelet #confirms kubelet on node 'cluster3-worker' is not running
+service kubelet status #reveals kubelet is config'd (as service) with conf file at /etc/systemd/system/kubelet.service.d/10-kubeadm.conf; reveals kubelet is inactive
+service kubelet start; service kubelet status #tried to start. Failed, but confirms is trying to execute /usr/local/bin/kubelet using params defined in /etc/systemd/system/kubelet.service.d/10-kubeadm.conf.
+#Two good ways to find more errors and get more logs (find out problem: wrong path specified):
+/usr/local/bin/kubelet; whereis kubelet #run command manually w/params
+journalctl -u kubelet #Second way: extended logging of service
+vim /etc/systemd/system/kubelet.service.d/10-kubeadm.conf #delete "/local" to result in: "/usr/bin/kubelet"
+systemctl daemon-reload && systemctl restart kubelet
+systemctl status kubelet #should now show as "Active (running)
+exit
+k get no #reveals all nodes are now ready
 ```
 </p>
 </details>
 
-### Q19 | 3% ###
+### Q19 | Create Secret and mount into Pod | 3% ###
 <details><summary>
 **this task can only be solved if questions 18 or 20 have been successfully implemented and the k8s-c3-CCC cluster has a functioning worker node**
 <p>Use context: kubectl config use-context k8s-c3-CCC</p>

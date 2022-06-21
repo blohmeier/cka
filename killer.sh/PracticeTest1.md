@@ -589,12 +589,66 @@ k get no #reveals all nodes are now ready
 <p>
 
 ```bash
-
+k create ns secret
+cp /opt/course/19/secret1.yaml 19_secret1.yml
+vim 19_secret1.yml #under .metadata:
+namespace: secret #changed from namespace: todo
+k create -f 19_secret1.yml
+k -n secret create secret generic secret2 --from-literal=user=user1 --from-literal=pass=1234
+k -n secret run secret-pod --image=busybox:1.31.1 $dy -- sh -c "sleep 5d" > 19.yml
+vim 19.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: secret-pod
+  name: secret-pod
+  namespace: secret                       # add
+spec:
+  tolerations:                            # add
+  - effect: NoSchedule                    # add
+    key: node-role.kubernetes.io/master   # add
+  containers:
+  - args:
+    - sh
+    - -c
+    - sleep 1d
+    image: busybox:1.31.1
+    name: secret-pod
+    resources: {}
+    env:                                  # add
+    - name: APP_USER                      # add
+      valueFrom:                          # add
+        secretKeyRef:                     # add
+          name: secret2                   # add
+          key: user                       # add
+    - name: APP_PASS                      # add
+      valueFrom:                          # add
+        secretKeyRef:                     # add
+          name: secret2                   # add
+          key: pass                       # add
+    volumeMounts:                         # add
+    - name: secret1                       # add
+      mountPath: /tmp/secret1             # add
+      readOnly: true                      # add
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:                                # add
+  - name: secret1                         # add
+    secret:                               # add
+      secretName: secret1                 # add
+status: {}
+k create -f 19.yml
+#confirm all is correct:
+k -n secret exec secret-pod -- env | grep APP
+k -n secret exec secret-pod -- find /tmp/secret1 #identify file to "cat" below
+k -n secret exec secret-pod -- cat /tmp/secret1/halt
 ```
 </p>
 </details>
 
-### Q20 | 10% ###
+### Q20 | Update Kubernetes Version and join cluster | 10% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c3-CCC</p>
 <p>Your coworker said node cluster3-worker2 is running an older Kubernetes version and is not even part of the cluster. Update Kubernetes on that node to the exact version that's running on cluster3-master1. Then add this node to the cluster. Use kubeadm for this.</p>

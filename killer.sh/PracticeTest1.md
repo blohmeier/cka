@@ -276,9 +276,14 @@ k get po -o wide | grep schedule #confirm both pods running - i.e. scheduler bac
   
 ```bash
 k -n project-hamster create sa processor
-k -n project-hamster create role accessor --verb=create --resource=secret --resource=configmap
+k -n project-hamster create role processor --verb=create --resource=secret --resource=configmap
 k -n project-hamster create rolebinding processor --role processor --serviceaccount project-hamster:processor #bind role to sa
-k auth can-i -h #examples of tests for new rolebinding
+#test RBAC setup:
+k -n project-hamster auth can-i create secret --as system:serviceaccount:project-hamster:processor #yes
+k -n project-hamster auth can-i create configmap --as system:serviceaccount:project-hamster:processor #yes
+k -n project-hamster auth can-i create pod --as system:serviceaccount:project-hamster:processor #no
+k -n project-hamster auth can-i delete secret --as system:serviceaccount:project-hamster:processor #no
+k -n project-hamster auth can-i get configmap --as system:serviceaccount:project-hamster:processor #no
 ```
 </p>
 </details>

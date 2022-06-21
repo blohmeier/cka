@@ -662,13 +662,17 @@ kubeadm upgrade node #error means node was never initialized (so nothing to upda
 apt update; apt show kubectl -a | grep 1.23; apt install kubectl=1.23.1-00 kubelet=1.23.1-00; kubectl version; kubelet --version #updates kubelet and kubectl and confirms versions have been updated to v1.23.1.
 systemctl restart kubelet; systemctl restart kubelet #ignore error
 exit
-#add cluster3-master2 to cluster:
+#add cluster3-worker2 to cluster:
 ssh cluster3-master1; kubeadm token create --print-join-command
+exit
+ssh cluster3-worker2; <enter join command from above>
+exit
+k get no #reveals cluster3-worker2 has been added to cluster and is up to date
 ```
 </p>
 </details>
 
-### Q21 | 2% ###
+### Q21 | Create a Static Pod and Service | 2% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c3-CCC</p>
 <p>Create a Static Pod named my-static-pod in Namespace default on cluster3-master1. It should be of image nginx:1.16-alpine and have resource requests for 10m CPU and 20Mi memory.</p>

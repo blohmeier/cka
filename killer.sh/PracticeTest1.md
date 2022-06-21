@@ -777,12 +777,52 @@ echo -e "Extended Key Usage: TLS Web Client Authentication" >> /opt/course/23/ce
 <p>
   
 ```bash
+k -n project-snake get pod -L app #check existing pods and their labels
+man curl | grep -- -s #OPTIONAL - gets info on -s flag used below. Source: https://unix.stackexchange.com/questions/324141/grep-the-man-page-of-a-command-for-hyphenated-options
+#to confirm no "backend-*" pod is restricted:
+k -n project-snake get po -o wide #get IPS (1-3) of pods other than backend-*: 1=db1-0, 2=db2-0, 3=vault-0
+k -n project-snake exec backend-0 -- curl -m 10 -s <IPs 1-3 from above with ports i.e., IP1:1111, IP2:2222 etc.> #confirms output of: database one, database two, vault secret storage
+
+vim 24_np.yml #create netpol; changes are as compared to k8s docs:
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: np-backend
+  namespace: project-snake
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+    - Egress                        # policy is only about Egress
+  egress:
+    -                               # first rule
+      to:                           # first condition "to"
+      - podSelector:
+          matchLabels:
+            app: db1
+      ports:                        # second condition "port"
+      - protocol: TCP
+        port: 1111
+    -                               # second rule
+      to:                           # first condition "to"
+      - podSelector:
+          matchLabels:
+            app: db2
+      ports:                        # second condition "port"
+      - protocol: TCP
+        port: 2222
+
+k create -f 24_np.yml
+
+#retest below; first two should work, third should not:
+k -n project-snake exec backend-0 -- curl -m 10 -s <IPs 1-3 from above with ports i.e., IP1:1111, IP2:2222 etc.> #confirms output of: database one, database two, vault secret storage
 
 ```
 </p>
 </details>
 
-### Q25 | 8% ###
+### Q25 | Etcd Snapshot Save and Restore | 8% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c3-CCC</p>
 <p>Make a backup of etcd running on cluster3-master1 and save it on the master node at /tmp/etcd-backup.db.</p>

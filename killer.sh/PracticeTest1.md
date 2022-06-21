@@ -340,7 +340,7 @@ k -n project-tiger get pod -l id=ds-important -o wide
 </p>
 </details>
 
-### Q12 | 6% ###
+### Q12 | Deployment on all Nodes | 6% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>Use Namespace project-tiger for the following. Create a Deployment named deploy-important with label id=very-important (the Pods should also have this label) and 3 replicas. It should contain two containers, the first named container1 with image nginx:1.17.6-alpine and the second one named container2 with image kubernetes/pause.</p>
@@ -350,6 +350,48 @@ k -n project-tiger get pod -l id=ds-important -o wide
 <p>
   
 ```bash
+k -n project-tiger create deploy --image=nginx:1.17.6-alpine deploy-important $dy > 12.yml
+vim 12.yml #below is first of two possible ways - podAntiAffinity
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    id: very-important                  # change
+  name: deploy-important
+  namespace: project-tiger              # important
+spec:
+  replicas: 3                           # change
+  selector:
+    matchLabels:
+      id: very-important                # change
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        id: very-important              # change
+    spec:
+      containers:
+      - image: nginx:1.17.6-alpine
+        name: container1                # change
+        resources: {}
+      - image: kubernetes/pause         # add
+        name: container2                # add
+      affinity:                                             # add
+        podAntiAffinity:                                    # add
+          requiredDuringSchedulingIgnoredDuringExecution:   # add
+          - labelSelector:                                  # add
+              matchExpressions:                             # add
+              - key: id                                     # add
+                operator: In                                # add
+                values:                                     # add
+                - very-important                            # add
+            topologyKey: kubernetes.io/hostname             # add
+k create -f 12.yml
+k -n project-tiger get deploy -l id=very-important #confirm shows READY: 2/3 
+k -n project-tiger get pod -o wide -l id=very-important #confirm shows 1 Pod on each of the 2 worker nodes, 3rd Pod not scheduled
+k -n project-tiger describe pod deploy-important-5c99c99d4d-4rt9k | grep -i events -A5 #among other things, shows under Message: 0/3 nodes are available: 1 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn't tolerate, 2 node(s) didn't match pod anti-affinity rules 
 
 ```
 </p>

@@ -296,7 +296,9 @@ k -n project-hamster auth can-i get configmap --as system:serviceaccount:project
 <p>
   
 ```bash
-
+#can't create ds directly, so create deploy and edit it into a ds:
+k -n project-tiger create deploy --image=httpd:2.4-alpine ds-important $dy > 11.yml
+vim 11.yml
 ```
 </p>
 </details>

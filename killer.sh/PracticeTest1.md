@@ -656,7 +656,14 @@ k -n secret exec secret-pod -- cat /tmp/secret1/halt
 <p>
   
 ```bash
-
+k get no #reveals cluster3-master1 runs v1.23.1; confirms cluster3-worker2 is not part of cluster
+ssh cluster3-worker2; kubeadm version; kubectl version; kubelet --version # reveals kubeadm is up to date (i.e. runs v1.23.1) though kubectl and kubelet are not. So can try:
+kubeadm upgrade node #error means node was never initialized (so nothing to update) - can do later with kubeadm join. For now, update kubelet and kubectl:
+apt update; apt show kubectl -a | grep 1.23; apt install kubectl=1.23.1-00 kubelet=1.23.1-00; kubectl version; kubelet --version #updates kubelet and kubectl and confirms versions have been updated to v1.23.1.
+systemctl restart kubelet; systemctl restart kubelet #ignore error
+exit
+#add cluster3-master2 to cluster:
+ssh cluster3-master1; kubeadm token create --print-join-command
 ```
 </p>
 </details>

@@ -740,20 +740,31 @@ echo -e "kubeadm certs renew apiserver" >> /opt/course/22/kubeadm-renew-certs.sh
 <p>Use context: kubectl config use-context k8s-c2-AC</p>
 <p>Node cluster2-worker1 has been added to the cluster using kubeadm and TLS bootstrapping.</p>
 <p>Find the "Issuer" and "Extended Key Usage" values of the cluster2-worker1:</p>
-<p>kubelet client certificate, the one used for outgoing connections to the kube-apiserver.</p>
-<p>kubelet server certificate, the one used for incoming connections from the kube-apiserver.</p>
+<p>1. kubelet client certificate, the one used for outgoing connections to the kube-apiserver.</p>
+<p>2. kubelet server certificate, the one used for incoming connections from the kube-apiserver.</p>
 <p>Write the information into file /opt/course/23/certificate-info.txt.</p>
 <p>Compare the "Issuer" and "Extended Key Usage" fields of both certificates and make sense of these.</p>
 </summary>
 <p>
   
 ```bash
+#for 1. (the kubelet client cert): get info for copying at k8s@terminal:/opt/course/23/certificate-info.txt
+ssh cluster2-worker1
+openssl x509  -noout -text -in /var/lib/kubelet/pki/kubelet-client-current.pem | grep -i 'issuer\|extended' -A2
 
+#for 2. (the kubelet server cert): get info for copying at k8s@terminal:/opt/course/23/certificate-info.txt
+openssl x509  -noout -text -in /var/lib/kubelet/pki/kubelet.crt | grep -i 'issuer\|extended' -A2
+
+#exit worker node and enter required data from k8s@terminal:
+echo -e "Issuer: CN = kubernetes" >> /opt/course/23/certificate-info.txt
+echo -e "Extended Key Usage: TLS Web Client Authentication" >> /opt/course/23/certificate-info.txt
+echo -e "Issuer: CN = cluster2-worker1-ca@1641549536" >> /opt/course/23/certificate-info.txt
+echo -e "Extended Key Usage: TLS Web Client Authentication" >> /opt/course/23/certificate-info.txt
 ```
 </p>
 </details>
 
-### Q24 | 9% ###
+### Q24 | NetworkPolicy | 9% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c1-H</p>
 <p>There was a security incident where an intruder was able to access the whole cluster from a single hacked backend Pod.</p>

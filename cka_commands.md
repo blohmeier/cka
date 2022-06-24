@@ -30,4 +30,9 @@ ip addr add 192.168.1.10/24 dev eth0        #set up addresses in ifs.
 route OR ip route                           #view IP routing table
 ip route add 192.168.2.0/24 via 192.168.1.1 #add ip route table entries
 cat /proc/sys/net/ipv4/ip_forward           #check if ip forwarding enabled on a host, if working on host config'd as router.
+
+
+cat >> /etc/hosts                           #use stdin to add entry to hosts file for ip address = hostname correlation
+hostname
+cat /etc/resolv.conf                        #add 'nameserver <IP address> entry to configure DNS server address at a host
 ```

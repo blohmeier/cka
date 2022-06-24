@@ -48,4 +48,30 @@ ps aux            #list container processes - depends on user visibility
 ip netns add <ns name>                      #create new network namespace on a host
 ip netns                                    #list them
 
+ip netns exec <ns name> ip link             #list interfaces within <namespace name>; prevents from viewing host interfaces
+OR 
+ip -n <ns name> link
+SAME FOR
+arp 
+VS
+ip netns exec <ns name> arp
+OR
+route 
+VS
+ip netns exec <ns name> route
+
+#connect two namespaces together using virtual ethernet pair (aka virtual cable / pipe):
+#Step 1:
+ip link add veth-<ns1 name (aka ns1)> type veth peer name veth-<ns2 name (aka ns2)>
+#Step 2:
+ip link set veth-<ns1> netns <ns1>
+ip link set veth-<ns2> netns <ns2>
+#Step 3:
+ip -n <ns1> addr add <IP1> dev veth-<ns1>
+ip -n <ns2> addr add <IP2> dev veth-<ns2>
+#Step 4:
+ip -n <ns1> link set <IP1> veth-<ns1> up
+ip -n <ns2> link set <IP2> veth-<ns2> up
+#Step 5: Test by pinging from ns1 to IP2:
+ip netns exec <ns1> ping <IP2>
 ```

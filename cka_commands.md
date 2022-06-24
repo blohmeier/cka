@@ -158,3 +158,14 @@ ip route add <ip/mask> via <ip for network used to get there>
 cat /proc/sys/net/ip4/ip_forward
 arp
 netstat -plnt
+
+```
+
+```
+§8-Networking:199. Practice Test - CNI Weave
+grep --color '<text>' #colors output. Good when there's lots of text per line. e.g.:
+ps -aux | grep kubelet | grep --color network-plugin=
+root      4294  0.0  0.0 4236164 111332 ?      Ssl  19:38   0:35 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --network-plugin=cni --pod-infra-container-image=k8s.gcr.io/pause:3.6
+
+cat /etc/cni/net.d/net-script.conf
+```

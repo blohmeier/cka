@@ -125,8 +125,11 @@ ip netns exec blue ip route add 192.168.1.0/24 via 192.168.15.5
 iptables -t nat -A POSTROUTING -s 192.168.15.0/24 -j MASQUERADE
 #test last step:
 ip netns exec blue ping 192.168.1.3
-#allow ping from inside a ns to the wider internet (e.g. 8.8.8.8):
-
+#allow ping from inside a ns (here, ns 'blue') to the wider internet (e.g. 8.8.8.8):
+ip netns exec blue ip route add default via 192.168.15.5
 #test last step:
 ip netns exec blue ping 8.8.8.8
+#add connectivity from the outside world to inside each ns (e.g., blue ns hosts webapp on port 80; change from only host 'knowing about' blue ns to making webapp in blue ns accessible to the outside world)
+#         NOTE: we do this by adding a port forwarding rule to say that any traffic coming to port 80 on the local host must be forwarded to port 80 on the IP assigned to ns blue:
+iptables -t nat -A PREROUTING --dport 80 --to-destination 192.168.15.2:80 -j DNAT
 ```

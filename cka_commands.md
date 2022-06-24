@@ -135,3 +135,14 @@ iptables -t nat -A PREROUTING --dport 80 --to-destination 192.168.15.2:80 -j DNA
 #From "FAQ": make sure to set netmask when setting ip address:
 ip -n red addr add 192.168.1.10/24 dev veth-red
 ```
+
+```
+§8-Networking:190. Prerequisite - Docker Networking
+docker network ls           #bridge here is equivalent to 'docker0' from command below
+ip link                     #docker0 here is equivalent to 'bridge' from command above
+ip netns
+ip -n <netns from above> addr
+docker run -p 8080:80 nginx #forward any traffic to port 8080 on docker host to port 80 on nginx container.
+iptables -nvL -t nat        #list NAT rules e.g. rule docker appends to PREROUTING chain to change destination port from 8080 to 80.
+
+```

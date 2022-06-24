@@ -146,3 +146,15 @@ docker run -p 8080:80 nginx #forward any traffic to port 8080 on docker host to 
 iptables -nvL -t nat        #list NAT rules e.g. rule docker appends to PREROUTING chain to change destination port from 8080 to 80.
 
 ```
+
+```
+§8-Networking:192. Practice Test - Explore K8s Environment
+Commands to remember:
+ip link    
+ip addr
+ip addr add <IP/mask> dev <int>
+ip route
+ip route add <ip/mask> via <ip for network used to get there>
+cat /proc/sys/net/ip4/ip_forward
+arp
+netstat -plnt

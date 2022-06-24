@@ -132,4 +132,6 @@ ip netns exec blue ping 8.8.8.8
 #add connectivity from the outside world to inside each ns (e.g., blue ns hosts webapp on port 80; change from only host 'knowing about' blue ns to making webapp in blue ns accessible to the outside world)
 #         NOTE: we do this by adding a port forwarding rule to say that any traffic coming to port 80 on the local host must be forwarded to port 80 on the IP assigned to ns blue:
 iptables -t nat -A PREROUTING --dport 80 --to-destination 192.168.15.2:80 -j DNAT
+#From "FAQ": make sure to set netmask when setting ip address:
+ip -n red addr add 192.168.1.10/24 dev veth-red
 ```

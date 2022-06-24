@@ -37,6 +37,6 @@ hostname
 cat /etc/resolv.conf                        #add 'nameserver <IP address>' entry to configure DNS server address at a host
                                             #commmon nameservers: 8.8.8.8 (hosted by google)
                                             #ALTERNATIVE: add dns server entry: Forward All to 8.8.8.8
-                                            #SECOND POINT: add 'search <subdomain.domain>.com' entry for alternative domain when                                                    queried DNS name is not known e.g.: 'search google.com' results in any unknown 'ping'                                                  (e.g. 'ping pigglywiggly') resolved by pinging google.
+                                            #SECOND POINT: add 'search <subdomain.domain>.com' entry for alternative domain when                                                <p> queried DNS name is not known e.g.: 'search google.com' results in any unknown 'ping'                                                  (e.g. 'ping pigglywiggly') resolved by pinging google.
 cat /etc/nsswitch.conf                      #change default order of resolution (hosts file first, then dns server)
 ```

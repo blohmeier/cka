@@ -34,6 +34,9 @@ cat /proc/sys/net/ipv4/ip_forward           #check if ip forwarding enabled on a
 
 cat >> /etc/hosts                           #use stdin to add entry to hosts file for ip address = hostname correlation
 hostname
-cat /etc/resolv.conf                        #add 'nameserver <IP address> entry to configure DNS server address at a host
+cat /etc/resolv.conf                        #add 'nameserver <IP address>' entry to configure DNS server address at a host
+                                            #commmon nameservers: 8.8.8.8 (hosted by google)
+                                            #ALTERNATIVE: add dns server entry: Forward All to 8.8.8.8
+                                            #SECOND POINT: add 'search <subdomain.domain>.com' entry for alternative domain when                                                    queried DNS name is not known e.g.: 'search google.com' results in any unknown 'ping'                                                  (e.g. 'ping pigglywiggly') resolved by pinging google.
 cat /etc/nsswitch.conf                      #change default order of resolution (hosts file first, then dns server)
 ```

@@ -169,3 +169,14 @@ root      4294  0.0  0.0 4236164 111332 ?      Ssl  19:38   0:35 /usr/bin/kubele
 
 cat /etc/cni/net.d/net-script.conf
 ```
+
+```
+§8-Networking:204. Practice Test - Networking Weave
+root@controlplane ~
+
+ls /etc/etc/cni/net.d         #confirm the Networking Solution used by the cluster
+
+ip addr show weave            #confirm POD IP address range configured by weave
+
+ip route
+```

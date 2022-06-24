@@ -61,11 +61,22 @@ VS
 ip netns exec <ns name> route
 
 #connect two namespaces together using virtual ethernet pair (aka virtual cable / pipe):
+#Step 0: create each ns e.g.:
+ip netns red
+ip netns blue
+#
 #Step 1:
 ip link add veth-<ns1 name (aka ns1)> type veth peer name veth-<ns2 name (aka ns2)>
+#e.g.
+ip link add veth-red type veth peer name veth-blue
+#
 #Step 2:
 ip link set veth-<ns1> netns <ns1>
 ip link set veth-<ns2> netns <ns2>
+#e.g.
+ip link set veth-red netns red
+ip link set veth-blue netns blue
+#
 #Step 3:
 ip -n <ns1> addr add <IP1> dev veth-<ns1>
 ip -n <ns2> addr add <IP2> dev veth-<ns2>

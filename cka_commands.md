@@ -35,4 +35,5 @@ cat /proc/sys/net/ipv4/ip_forward           #check if ip forwarding enabled on a
 cat >> /etc/hosts                           #use stdin to add entry to hosts file for ip address = hostname correlation
 hostname
 cat /etc/resolv.conf                        #add 'nameserver <IP address> entry to configure DNS server address at a host
+cat /etc/nsswitch.conf                      #change default order of resolution (hosts file first, then dns server)
 ```

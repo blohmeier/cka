@@ -23,8 +23,11 @@ journalctl -u etcd.service -l
 
 ```
 §8-Networking
-ip link
-ip addr add 192.168.1.10/24 dev eth0
-route
-
+ip link                                     #list/modify host interfaces
+ip addr                                     #see ip addresses assigned to interfaces
+ip addr add 192.168.1.10/24 dev eth0        #set up addresses in ifs. 
+                                            #To persist after restart, modify /etc/network/interfaces
+route OR ip route                           #view IP routing table
+ip route add 192.168.2.0/24 via 192.168.1.1 #add ip route table entries
+cat /proc/sys/net/ipv4/ip_forward           #check if ip forwarding enabled on a host, if working on host config'd as router.
 ```

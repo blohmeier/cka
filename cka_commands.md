@@ -41,4 +41,11 @@ cat /etc/resolv.conf                        #(1)  add 'nameserver <IP address>' 
                                             #     queried DNS name is not known e.g.: 'search google.com' results in any unknown
                                             #     'ping' (e.g. 'ping pigglywiggly') resolved by pinging google.
 cat /etc/nsswitch.conf                      #change default order of resolution (hosts file first, then dns server)
+nslookup www.google.com                     #query host name www.google.com from a dns server - DOES NOT CONSIDER /etc/hosts
+dig www.google.com                          #like nslookup, but returns more details in a similar form as is stored at the dns server
+
+ps aux            #list container processes - depends on user visibility
+ip netns add <ns name>                      #create new network namespace on a host
+ip netns                                    #list them
+
 ```

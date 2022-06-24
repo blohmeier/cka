@@ -121,6 +121,12 @@ ip -n blue link set veth-blue up
 ip addr add 192.186.15.5/24 dev v-net-0
 #Configure bridge to reach LAN network through eth0 port at the host:
 ip netns exec blue ip route add 192.168.1.0/24 via 192.168.15.5
+#add NAT functionality to host; allows ping from inside a ns to outside the host but within the LAN
+iptables -t nat -A POSTROUTING -s 192.168.15.0/24 -j MASQUERADE
+#test last step:
+ip netns exec blue ping 192.168.1.3
+#allow ping from inside a ns to the wider internet (e.g. 8.8.8.8):
 
-
+#test last step:
+ip netns exec blue ping 8.8.8.8
 ```

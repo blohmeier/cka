@@ -20,3 +20,11 @@ journalctl | grep apiserver
 #from 7-Security 134-145
 journalctl -u etcd.service -l
 ```
+
+```
+§8-Networking
+ip link
+ip addr add 192.168.1.10/24 dev eth0
+route
+
+```

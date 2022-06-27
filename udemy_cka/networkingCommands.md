@@ -25,7 +25,9 @@ k -n kube-system get ds
 ```
 
 ```
-From 
+DNS in k8s
+
+
 
 
 ```

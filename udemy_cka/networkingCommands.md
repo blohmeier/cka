@@ -26,7 +26,8 @@ k -n kube-system get ds
 
 ```
 DNS in k8s
-
+#view kubelet manifest
+cat /var/lib/kubelet/config.yaml
 
 
 

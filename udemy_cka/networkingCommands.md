@@ -32,3 +32,11 @@ cat /var/lib/kubelet/config.yaml
 
 
 ```
+
+```
+Ingress Networking
+#get from to http://my-online-store.com
+
+
+
+```

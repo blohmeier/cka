@@ -35,7 +35,9 @@ cat /var/lib/kubelet/config.yaml
 
 ```
 Ingress Networking
-#get from to http://my-online-store.com
+#get from http://<IP address>:38080 to http://my-online-store.com
+#1 Prevent users from entering IP address each time by configuring DNS server to point to IP of nodes.
+#2 Save users from remembering port number by adding additional layer between DNS server and cluster (e.g., proxy-server) that proxies requests on port 80 to port 38080 on your cluster nodes.
 
 
 

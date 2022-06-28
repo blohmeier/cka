@@ -39,7 +39,7 @@ Ingress Networking
 #1 Prevent users from entering IP address each time by configuring DNS server to point to IP of nodes.
 #2 Save users from remembering port number by:
     A. adding additional layer between DNS server and cluster (e.g., proxy-server) that proxys requests on port 80 to port 38080 on your cluster nodes.
-    B.  Pointing your DNS to this proxy-server. Users can now access your app using "my-online-store.com".
+    B. Pointing your DNS to this proxy-server. Users can now access your app using "my-online-store.com".
 
 
 

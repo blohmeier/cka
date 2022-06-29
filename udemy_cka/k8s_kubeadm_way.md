@@ -16,8 +16,12 @@ vagrant ssh kubenode02
 
 ```
 BOOTSTRAP CLUSTER USING KUBEADM
-kubadm documentation link: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+kubadm documentation links (updated?): 
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/?force_isolation=true
+
 lsmod | grep br_netfilter #ensure this module is loaded before step of ensuring iptables see bridged traffic
-sudo modprobe br_netfilter #load module explicitly
+sudo modprobe br_netfilter #load module explicitly (if no output from command above)
+#repeat above for all nodes. Then, run below to create new kernel parameters:
 
 ```

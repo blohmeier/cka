@@ -16,5 +16,8 @@ vagrant ssh kubenode02
 
 ```
 BOOTSTRAP CLUSTER USING KUBEADM
+kubadm documentation link: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+lsmod | grep br_netfilter #ensure this module is loaded before step of ensuring iptables see bridged traffic
+sudo modprobe br_netfilter #load module explicitly
 
 ```

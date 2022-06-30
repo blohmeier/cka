@@ -51,5 +51,13 @@ sudo apt-get update
 sudo apt-get install -y kubelet=1.23.0-00 kubeadm=1.23.0-00 kubectl=1.23.0-00
 sudo apt-mark hold kubelet kubeadm kubectl
 
-
+#2) No nodes yet. To add nodes, must install ___ and initialize controlplane node:
+#Get IP needed for kubadm init command
+ifconfig eth0
+#init command with output from above
+kubeadm init --apiserver-cert-extra-sans=controlplane --apiserver-advertise-address <IP from ifconfig eth0> --pod-network-cidr=10.244.0.0/16
+#set up kubeconfig:
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```

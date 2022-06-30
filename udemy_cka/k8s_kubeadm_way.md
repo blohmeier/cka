@@ -68,4 +68,8 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 kubeadm token create --print-join-command
 #next, run join command on node01:
 kubeadm join 10.34.32.12:6443 --token o2ts39.iaiqrwdwbpm22lb1 --discovery-token-ca-cert-hash sha256:c9e5d2f6e384bf677c586cd7f724fcd432fef025a37dab80a89ef275fcf3b0c0
+
+#5) Install a Network Plugin. As a default, we will go with flannel
+#On controlplane, run:
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```

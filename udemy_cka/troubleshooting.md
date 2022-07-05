@@ -12,4 +12,8 @@ Controlplane Failure Troubleshooting Steps:
 k get no; k get po
 #check controlplane pods
 k get po -n kube-system
+#or if components deployed as services:
+service kube-apiserver status
+service kube-controller-manager status
+service kube-scheduler status
 ```

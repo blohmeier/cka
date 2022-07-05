@@ -3,3 +3,6 @@
 kubectl -n gamma describe pod mysql | grep -i label
 kubectl -n gamma describe svc mysql-service | grep -i selector
 ```
+```
+k logs <podname> -f --previous #view logs of previously running pod
+```

@@ -7,13 +7,21 @@ kubectl -n gamma describe svc mysql-service | grep -i selector
 k logs <podname> -f --previous #view logs of previously running pod
 ```
 ```
-Controlplane Failure Troubleshooting Steps:
-#Check node status
+Control Plane Failure Troubleshooting Steps:
+#1: Check node status
 k get no; k get po
-#check controlplane pods
+#2: check controlplane pods
+#if kubeadm
 k get po -n kube-system
 #or if components deployed as services:
 service kube-apiserver status
 service kube-controller-manager status
 service kube-scheduler status
+#3: Check Service Logs (of control plane components)
+#if kubeadm, check logs of pods hosting control plane components:
+k logs kube-apiserver-master -n kube-system
+#or in case of svcs configured natively:
+sudo journalctl -u kube-apiserver
+#more tips are at:
+https://kubernetes.io/docs/tasks/debug/debug-cluster/
 ```

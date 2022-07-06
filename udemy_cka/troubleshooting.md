@@ -27,9 +27,17 @@ https://kubernetes.io/docs/tasks/debug/debug-cluster/
 ```
 ```
 Worker Node Failure Troubleshooting Steps:
-#1: Check node status - Ready or NotReady?
+#Check node status - Ready or NotReady?
 k get no
 #if NotReady:
 k describe node <name>
-#2: 
+#if "Status"=Unknown or True (except "Ready"), check LastHeartBeatTime then check status of node itself; if crashed bring it back up and check for possible cpu, mem or disk space on the nodes:
+top
+df -h
+#Check kubelet status & check logs for possible issues: 
+service kubelet status
+sudo journalctl -u kubelet
+#check kubelet certs, ensure not expired, are part of right group, and that certs are issued by the correct ca:
+openssl x509 -in /var/lib/kubelet/worker-1.crt -text
+
 ```

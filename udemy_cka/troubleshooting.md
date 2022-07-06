@@ -25,3 +25,11 @@ sudo journalctl -u kube-apiserver
 #more tips are at:
 https://kubernetes.io/docs/tasks/debug/debug-cluster/
 ```
+```
+Worker Node Failure Troubleshooting Steps:
+#1: Check node status - Ready or NotReady?
+k get no
+#if NotReady:
+k describe node <name>
+#2: 
+```

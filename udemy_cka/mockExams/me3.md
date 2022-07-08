@@ -103,18 +103,16 @@ status: {}
 
 k create -f 3.yml
 ```
-
+4(Q):
 ```
-4(Q): 
 Create a Pod called non-root-pod , image: redis:alpine
 runAsUser: 1000
 fsGroup: 2000
 Pod non-root-pod fsGroup configured
 Pod non-root-pod runAsUser configured
 ```
-
+4(A):
 ```
-4(A): 
 k run non-root-pod --image=redis:alpine $dy > 4.yml
 vim 4.yml #search for securityContext for correct edits:
 apiVersion: v1

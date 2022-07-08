@@ -246,3 +246,13 @@ Create a pod 'prod-redis' to run on node01
 k create ns hr
 k -n hr run hr-pod --image=redis:alpine --labels="environment=production,tier=frontend"
 ```
+```
+8(Q):
+A kubeconfig file called super.kubeconfig has been created under /root/CKA. There is something wrong with the configuration. Troubleshoot and fix it.
+Fix /root/CKA/super.kubeconfig
+```
+```
+8(A)
+```
+
+```

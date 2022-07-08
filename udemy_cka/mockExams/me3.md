@@ -243,5 +243,6 @@ Create a pod 'prod-redis' to run on node01
 ```
 7(A)
 ```
-
+k create ns hr
+k -n hr run hr-pod --image=redis:alpine --labels="environment=production,tier=frontend"
 ```

@@ -275,5 +275,7 @@ deployment has 3 replicas
 ```
 ```
 9(A)
-k scale deploy nginx-deploy --replicas=3 #k get deploy, k describe deploy reveals
+k scale deploy nginx-deploy --replicas=3 #k get deploy, k describe deploy ## reveals scale to 3 was never initiate. Is a kube-controller-manager task. Further investigate:
+k get po -n kube-system #kube-controller-manager-controlplane has status ImagePullBackOff
+
 ```

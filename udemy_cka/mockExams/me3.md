@@ -204,6 +204,44 @@ Create a pod 'prod-redis' to run on node01
 ```
 ```
 6(A)
-#FIRST test. SECOND apply fix. THIRD test again.
+```
+k taint no node01 env_type=production:NoSchedule
+k run dev-redis --image=redis:alpine
+k run prod-redis --image=redis:alpine $dy > 6.yml
+vi 6.yml #search for 'tolerations' to add at end:
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: prod-redis
+  name: prod-redis
+spec:
+  containers:
+  - image: redis:alpine
+    name: prod-redis
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  tolerations:
+  - key: "env_type"
+    operator: "Equal"
+    value: "production"
+    effect: "NoSchedule"
+status: {}
+```
+```
+7(Q):
+Taint the worker node node01 to be Unschedulable. Once done, create a pod called dev-redis, image redis:alpine, to ensure workloads are not scheduled to this worker node. Finally, create a new pod called prod-redis and image: redis:alpine with toleration to be scheduled on node01.
+key: env_type, value: production, operator: Equal and effect: NoSchedule
+Key = env_type
+Value = production
+Effect = NoSchedule
+pod 'dev-redis' (no tolerations) is not scheduled on node01?
+Create a pod 'prod-redis' to run on node01
+```
+```
+7(A)
+```
 
-#FIRST test.
+```

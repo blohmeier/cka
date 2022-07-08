@@ -254,5 +254,6 @@ Fix /root/CKA/super.kubeconfig
 ```
 8(A)
 ```
-
+#specify kubeconfig file other than default (in /.kube directory)
+k get no --kubeconfig
 ```

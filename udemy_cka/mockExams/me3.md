@@ -268,3 +268,12 @@ NAME           STATUS   ROLES                  AGE   VERSION
 controlplane   Ready    control-plane,master   72m   v1.20.0
 node01         Ready    <none>                 72m   v1.20.0 
 ```
+```
+9(Q):
+We have created a new deployment called nginx-deploy. scale the deployment to 3 replicas. Has the replica's increased? Troubleshoot the issue and fix it.
+deployment has 3 replicas
+```
+```
+9(A)
+k scale deploy nginx-deploy --replicas=3 #k get deploy, k describe deploy reveals
+```

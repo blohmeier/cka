@@ -136,4 +136,59 @@ spec:
 status: {}
 
 k create -f 4.yml
+
+k get po non-root-po -o yaml #verify securityContext,runAsUser,fsGroup
+```
+```
+5(Q):
+We have deployed a new pod called np-test-1 and a service called np-test-service. Incoming connections to this service are not working. Troubleshoot and fix it.
+Create NetworkPolicy, by the name ingress-to-nptest that allows incoming connections to the service over port 80.
+Important: Don't delete any current objects deployed.
+Important: Don't Alter Existing Objects!
+NetworkPolicy: Applied to All sources (Incoming traffic from all pods)?
+NetWorkPolicy: Correct Port?
+NetWorkPolicy: Applied to correct Pod?
+```
+```
+5(A)
+#FIRST test. SECOND apply fix. THIRD test again.
+
+#FIRST test.
+Temp container (could be netcat in busybox or since just port 80, use alpine curl):
+k run curl --image=alpine/curl --rm -it -- sh
+curl np-test-service
+#no response ... open second terminal to fix the issue
+
+#SECOND apply fix. In second terminal, search for NetworkPolicy and edit template:
+vi 5.yml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-to-nptest
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      run: np-test-1  # get value by running in separate terminal: k get po np-test-1 -o yaml | grep -i ' labels' -A3 ## yields: 
+                      # labels:
+                      #   run: np-test-1
+                      # managedFields:
+                      # - apiVersion: v1
+  policyTypes:
+    - Ingress
+  ingress:
+    - 
+      ports:
+        - protocol: TCP
+          port: 80
+
+k create -f 5.yml
+
+#THIRD test again. Should bet nginx test page:
+k run curl --image=alpine/curl --rm -it -- sh
+curl np-test-service
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title...
 ```

@@ -101,6 +101,8 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
+
+k create -f 3.yml
 ```
 ```
 4(Q): 
@@ -112,5 +114,26 @@ Pod non-root-pod runAsUser configured
 ```
 ```
 4(A): 
+k run non-root-pod --image=redis:alpine $dy > 4.yml
+vim 4.yml #search for securityContext for correct edits:
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: non-root-pod
+  name: non-root-pod
+spec:
+  securityContext:
+    runAsUser: 1000
+    fsGroup: 2000
+  containers:
+  - image: redis:alpine
+    name: non-root-pod
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
 
+k create -f 4.yml
 ```

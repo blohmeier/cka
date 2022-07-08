@@ -143,16 +143,19 @@ k create -f 4.yml
 k get po non-root-po -o yaml #verify securityContext,runAsUser,fsGroup
 ```
 
-```5(Q):
+```
+5(Q):
 We have deployed a new pod called np-test-1 and a service called np-test-service. Incoming connections to this service are not working. Troubleshoot and fix it.
 Create NetworkPolicy, by the name ingress-to-nptest that allows incoming connections to the service over port 80.
 Important: Don't delete any current objects deployed.
 Important: Don't Alter Existing Objects!
 NetworkPolicy: Applied to All sources (Incoming traffic from all pods)?
 NetWorkPolicy: Correct Port?
-NetWorkPolicy: Applied to correct Pod?```
+NetWorkPolicy: Applied to correct Pod?
+```
 
-```5(A)
+```
+5(A)
 #FIRST test. SECOND apply fix. THIRD test again.
 
 #FIRST test.
@@ -192,7 +195,8 @@ curl np-test-service
 <!DOCTYPE html>
 <html>
 <head>
-<title>Welcome to nginx!</title...```
+<title>Welcome to nginx!</title...
+```
 
 ```
 6(Q):

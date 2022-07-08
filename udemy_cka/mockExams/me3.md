@@ -15,7 +15,41 @@ watch -n 3 kubectl get po
 2:List the InternalIP of all nodes of the cluster. Save the result to a file /root/CKA/node_ips.
 Answer should be in the format: InternalIP of controlplane<space>InternalIP of node01 (in a single line)
 ```
-#JSONPATH options in kubectl cheat sheet AND visualize better with:
-k get no -o json | jq -c 'paths' grep -i InternalIP #
-k get no -o json | jq -c 'paths' grep InternalIP -B 5 -A 5
+#JSONPATH options in kubectl cheat sheet AND get path to use for InternalIP with:
+k get no -o json | jq -c 'paths' | grep -i InternalIP
+#above yields:
+["items",0,"metadata","managedFields",0,"fieldsV1","f:status","f:addresses","k:{\"type\":\"InternalIP\"}"]
+["items",0,"metadata","managedFields",0,"fieldsV1","f:status","f:addresses","k:{\"type\":\"InternalIP\"}","."]
+["items",0,"metadata","managedFields",0,"fieldsV1","f:status","f:addresses","k:{\"type\":\"InternalIP\"}","f:address"]
+["items",0,"metadata","managedFields",0,"fieldsV1","f:status","f:addresses","k:{\"type\":\"InternalIP\"}","f:type"]
+["items",1,"metadata","managedFields",1,"fieldsV1","f:status","f:addresses","k:{\"type\":\"InternalIP\"}"]
+["items",1,"metadata","managedFields",1,"fieldsV1","f:status","f:addresses","k:{\"type\":\"InternalIP\"}","."]
+["items",1,"metadata","managedFields",1,"fieldsV1","f:status","f:addresses","k:{\"type\":\"InternalIP\"}","f:address"]
+["items",1,"metadata","managedFields",1,"fieldsV1","f:status","f:addresses","k:{\"type\":\"InternalIP\"}","f:type"]
+k get no -o json | jq -c 'paths' | grep InternalIP -B 5 -A 5 #yields JSON data structure
+k get no -o json | jq -c 'paths' | grep type | grep -v "metadata" | grep address
+#above yields:
+["items",0,"status","addresses",0,"type"]
+["items",0,"status","addresses",1,"type"]
+["items",1,"status","addresses",0,"type"]
+["items",1,"status","addresses",1,"type"]
+#i.e., can see which fields are arrays (with 0 or 1 after them) ... then, are able to provide correct jsonpath command:
+k get no -o jsonpath='{.items[0].status.addresses[*].address}' #yields address for JUST FIRST NODE (.items[0]) i.e.:
+10.99.4.9 controlplane
+#Since only asked for internalIP, must filter out controlplane:
+root@controlplane ~ ➜  k get no -o jsonpath='{.items[0].status.addresses}'
+[{"address":"10.99.4.9","type":"InternalIP"},{"address":"controlplane","type":"Hostname"}]
+root@controlplane ~ ➜  k get no -o jsonpath='{.items[0].status.addresses}' | jq
+[
+  {
+    "address": "10.99.4.9",
+    "type": "InternalIP"
+  },
+  {
+    "address": "controlplane",
+    "type": "Hostname"
+  }
+]
+#To filter out, reference 'Cheat Sheet' for filter:
+k get no -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}' > /root/CKA/node_ips
 ```

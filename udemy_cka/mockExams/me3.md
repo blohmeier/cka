@@ -15,5 +15,7 @@ watch -n 3 kubectl get po
 2:List the InternalIP of all nodes of the cluster. Save the result to a file /root/CKA/node_ips.
 Answer should be in the format: InternalIP of controlplane<space>InternalIP of node01 (in a single line)
 ```
-
+#JSONPATH options in kubectl cheat sheet AND visualize better with:
+k get no -o json | jq -c 'paths' grep -i InternalIP #
+k get no -o json | jq -c 'paths' grep InternalIP -B 5 -A 5
 ```

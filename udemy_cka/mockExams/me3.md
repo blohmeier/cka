@@ -73,5 +73,44 @@ Container 2 Environment Value Set
 ```
 ```
 3(A):
+k run multi-pod --image=busybox --command $dy -- sleep 4800 > 3.yml
+vim 3.yml #add name 'beta'; add name 'alpha' and details:
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: multi-pod
+  name: multi-pod
+spec:
+  containers:
+  - image: nginx
+    name: alpha
+    env:
+      - name: "name"
+        value: alpha
+  - command:
+    - sleep
+    - "4800"
+    image: busybox
+    name: beta
+    env:
+      - name: "name"
+        value: beta
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+```
+```
+4Q: 
+Create a Pod called non-root-pod , image: redis:alpine
+runAsUser: 1000
+fsGroup: 2000
+Pod non-root-pod fsGroup configured
+Pod non-root-pod runAsUser configured
+```
+```
+4A: 
 
 ```

@@ -275,7 +275,13 @@ deployment has 3 replicas
 ```
 ```
 9(A)
-k scale deploy nginx-deploy --replicas=3 #k get deploy, k describe deploy ## reveals scale to 3 was never initiate. Is a kube-controller-manager task. Further investigate:
+k scale deploy nginx-deploy --replicas=3 
+k get deploy nginx-deploy; k describe deploy nginx-deploy #reveals never initiated scale to 3 replicas. Is a kube-controller-manager task. Further investigate:
 k get po -n kube-system #kube-controller-manager-controlplane has status ImagePullBackOff
-
+k describe po -n kube-system kube-controller-manager-controlplane #Messages show something's wrong with the image - "1" instead of "l" in the image name. 
+#NOTE: since kube-controller-manager-controlplane is run as static pod (can tell b/c 'controlplane' appended to end), so know manifest file location for editing:
+vi /etc/kubernetes/manifests/kube-controller-manager.yaml #replace "1" with "l" at FIVE places: under metadata.name, under metadata.labels.component, under spec.containers.command, under spec.containers.name, and in the image name. 
+#ALSO COULD: replace all with sed:
+sed -i 's/contro1/control/g' /etc/kubernetes/manifests/kube-controller-manager.yaml
+k get deploy nginx-deploy #confirms the scale to 3 replicas completed.
 ```

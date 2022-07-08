@@ -71,6 +71,7 @@ Container beta commands set correctly?
 Container 1 Environment Value Set
 Container 2 Environment Value Set
 ```
+
 ```
 3(A):
 k run multi-pod --image=busybox --command $dy -- sleep 4800 > 3.yml
@@ -104,6 +105,7 @@ status: {}
 
 k create -f 3.yml
 ```
+
 ```
 4(Q): 
 Create a Pod called non-root-pod , image: redis:alpine
@@ -112,6 +114,7 @@ fsGroup: 2000
 Pod non-root-pod fsGroup configured
 Pod non-root-pod runAsUser configured
 ```
+
 ```
 4(A): 
 k run non-root-pod --image=redis:alpine $dy > 4.yml
@@ -139,6 +142,7 @@ k create -f 4.yml
 
 k get po non-root-po -o yaml #verify securityContext,runAsUser,fsGroup
 ```
+
 ```
 5(Q):
 We have deployed a new pod called np-test-1 and a service called np-test-service. Incoming connections to this service are not working. Troubleshoot and fix it.
@@ -149,6 +153,7 @@ NetworkPolicy: Applied to All sources (Incoming traffic from all pods)?
 NetWorkPolicy: Correct Port?
 NetWorkPolicy: Applied to correct Pod?
 ```
+
 ```
 5(A)
 #FIRST test. SECOND apply fix. THIRD test again.
@@ -192,6 +197,7 @@ curl np-test-service
 <head>
 <title>Welcome to nginx!</title...
 ```
+
 ```
 6(Q):
 Taint the worker node node01 to be Unschedulable. Once done, create a pod called dev-redis, image redis:alpine, to ensure workloads are not scheduled to this worker node. Finally, create a new pod called prod-redis and image: redis:alpine with toleration to be scheduled on node01.
@@ -202,9 +208,9 @@ Effect = NoSchedule
 pod 'dev-redis' (no tolerations) is not scheduled on node01?
 Create a pod 'prod-redis' to run on node01
 ```
+
 ```
 6(A)
-```
 k taint no node01 env_type=production:NoSchedule
 k run dev-redis --image=redis:alpine
 k run prod-redis --image=redis:alpine $dy > 6.yml
@@ -242,7 +248,6 @@ Create a pod 'prod-redis' to run on node01
 ```
 ```
 7(A)
-```
 k create ns hr
 k -n hr run hr-pod --image=redis:alpine --labels="environment=production,tier=frontend"
 ```
@@ -253,7 +258,13 @@ Fix /root/CKA/super.kubeconfig
 ```
 ```
 8(A)
-```
-#specify kubeconfig file other than default (in /.kube directory)
-k get no --kubeconfig
+#test by specifying kubeconfig file other than default (in /.kube directory)
+k get no --kubeconfig /root/CKA/super.kubeconfig 
+The connection to the server controlplane:9999 was refused - did you specify the right host or port? #further troubleshoot:
+cat /root/CKA/super.kubeconfig # reveals server: https://controlplane:999 must be changed to 6443 (as shown in similar output of cat .kube/config). to change:
+vi /root/CKA/super.kubeconfig #9999 to 6443.
+k get no --kubeconfig /root/CKA/super.kubeconfig #working now:
+NAME           STATUS   ROLES                  AGE   VERSION
+controlplane   Ready    control-plane,master   72m   v1.20.0
+node01         Ready    <none>                 72m   v1.20.0 
 ```

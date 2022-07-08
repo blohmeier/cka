@@ -53,9 +53,8 @@ root@controlplane ~ ➜  k get no -o jsonpath='{.items[0].status.addresses}' | j
 #To filter out, reference 'Cheat Sheet' for filter:
 k get no -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}' > /root/CKA/node_ips
 ```
-
-```
 3(Q):
+```
 Create a pod called multi-pod with two containers. 
 Container 1, name: alpha, image: nginx
 Container 2: name: beta, image: busybox, command: sleep 4800 
@@ -71,9 +70,8 @@ Container beta commands set correctly?
 Container 1 Environment Value Set
 Container 2 Environment Value Set
 ```
-
-```
 3(A):
+```
 k run multi-pod --image=busybox --command $dy -- sleep 4800 > 3.yml
 vim 3.yml #add name 'beta'; add name 'alpha' and details:
 apiVersion: v1

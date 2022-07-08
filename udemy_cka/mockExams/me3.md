@@ -53,3 +53,25 @@ root@controlplane ~ ➜  k get no -o jsonpath='{.items[0].status.addresses}' | j
 #To filter out, reference 'Cheat Sheet' for filter:
 k get no -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}' > /root/CKA/node_ips
 ```
+
+```
+3(Q):
+Create a pod called multi-pod with two containers. 
+Container 1, name: alpha, image: nginx
+Container 2: name: beta, image: busybox, command: sleep 4800 
+Environment Variables:
+container 1:
+name: alpha
+Container 2:
+name: beta
+Pod Name: multi-pod
+Container 1: alpha
+Container 2: beta
+Container beta commands set correctly?
+Container 1 Environment Value Set
+Container 2 Environment Value Set
+```
+```
+3(A):
+
+```

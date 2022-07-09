@@ -47,4 +47,10 @@ kubectl get pods -l app=mysql --watch
 
 #verify you see new MySQL server IDs
 kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never -- bash -ic "while sleep 1; do /usr/bin/mysql -h mysql-read -e 'SELECT @@server_id'; done"
+
+#confirm data is replicated in new mysql-4 pod
+kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never -- /usr/bin/mysql -h mysql-4.mysql -e "SELECT * FROM mydb.notes"
+
+kubectl get services mysql-read #Display the internal virtual IP of the mysql-read endpoint
+echo "  type: LoadBalancer" >> mysql-services.yaml #Append a load balancer type to the mysql-read service declaration
 ```

@@ -22,6 +22,13 @@ kubectl get pods -l app=mysql --watch #get pods of a certain label; write any up
 
 ### With MySQL up and running, execute commands against the db to demonstrate it works and k8s can gracefully handle failures and other requests. ###
 ```
+Here, work with the MySQL stateful application to demonstrate:
+How to directly address pods in the cluster
+How to access the cluster via the mysql-read service
+How to take nodes out of service
+How Kubernetes automatically recovers from a simulated node failure
+How to permit access to the mysql-read service via an automatically provisioned ELB
+
 #create a mydb database with a 'notes' table in it with one record
 kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never -- /usr/bin/mysql -h mysql-0.mysql -e "CREATE DATABASE mydb; CREATE TABLE mydb.notes (note VARCHAR(250)); INSERT INTO mydb.notes VALUES ('k8s Cloud Academy Lab');"
 
@@ -53,4 +60,15 @@ kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never -- /usr/bi
 
 kubectl get services mysql-read #Display the internal virtual IP of the mysql-read endpoint
 echo "  type: LoadBalancer" >> mysql-services.yaml #Append a load balancer type to the mysql-read service declaration
+#apply changes; re-display mysql-read service status:
+kubectl apply -f mysql-services.yaml; kubectl get services mysql-read
+
+#describe the mysql-read service to find the DNS name of the external load balancer endpoint
+kubectl describe services mysql-read | grep "LoadBalancer Ingress"
+
+#Use the external load balancer to send some read requests to the cluster
+load_balancer=$(kubectl get services mysql-read -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never --\
+  bash -ic "while sleep 1; do /usr/bin/mysql -h $load_balancer -e 'SELECT @@server_id'; done"
+#where the load_balancer variable stores the ELB DNS name. It will resemble a830e12d78dcd11e79aba028416f4825-905974806.us-west-2.elb.amazonaws.com. You are now accessing the cluster from the ELB which provides access outside of the cluster.
 ```

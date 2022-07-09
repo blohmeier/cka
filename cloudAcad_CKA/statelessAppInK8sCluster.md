@@ -72,3 +72,20 @@ kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never --\
   bash -ic "while sleep 1; do /usr/bin/mysql -h $load_balancer -e 'SELECT @@server_id'; done"
 #where the load_balancer variable stores the ELB DNS name. It will resemble a830e12d78dcd11e79aba028416f4825-905974806.us-west-2.elb.amazonaws.com. You are now accessing the cluster from the ELB which provides access outside of the cluster.
 ```
+
+### Monitoring Your Kubernetes Cluster Using Kubernetes Dashboard ###
+```
+Create ClusterRoleBinding for kubernetes-dashboard ServiceAccount
+kubectl delete -f dashboard-admin.yaml # delete the default role binding
+kubectl create -f dashboard-admin.yaml
+
+#output a token for the kubernetes dashboard service account which you will need to sign in to the dashboard later
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep dashboard-admin | awk '{print $1}') \
+  | tail -1 \
+  | awk '{print $2}'
+
+#Run a Kubernetes proxy server on the bastion in order to proxy requests to the control plane node from outside the private subnet
+sudo kubectl port-forward -n kubernetes-dashboard --address 0.0.0.0 service/kubernetes-dashboard 8001:443
+
+
+```

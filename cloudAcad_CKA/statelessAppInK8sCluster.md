@@ -36,4 +36,5 @@ k get po -o wide
 #simulate taking the node running the mysql-2 pod out of service for maintenance:
 node=$(kubectl get pods --field-selector metadata.name=mysql-2 -o=jsonpath='{.items[0].spec.nodeName}')
 kubectl drain $node --force --delete-local-data --ignore-daemonsets # prevents new pods from being scheduled on the node; evicts existing pods scheduled to it
+k get po -o wide --watch # Watch the mysql-2 pod get rescheduled to a different node:
 ```

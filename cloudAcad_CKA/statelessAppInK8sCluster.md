@@ -19,3 +19,21 @@ metrics-server: Not an essential component of a Kubernetes cluster but it is use
 ```
 kubectl get pods -l app=mysql --watch #get pods of a certain label; write any updates to the output
 ```
+
+### With MySQL up and running, execute commands against the db to demonstrate it works and k8s can gracefully handle failures and other requests. ###
+```
+#create a mydb database with a 'notes' table in it with one record
+kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never -- /usr/bin/mysql -h mysql-0.mysql -e "CREATE DATABASE mydb; CREATE TABLE mydb.notes (note VARCHAR(250)); INSERT INTO mydb.notes VALUES ('k8s Cloud Academy Lab');"
+
+#Run a query using the mysql-read endpoint to select all of the notes in the table:
+kubectl run mysql-client --image=mysql:5.7 -i -t --rm --restart=Never -- /usr/bin/mysql -h mysql-read -e "SELECT * FROM mydb.notes"
+
+#Run an SQL command that outputs the MySQL server's ID to confirm that the requests are distributed to different pods
+kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never -- bash -ic "while sleep 1; do /usr/bin/mysql -h mysql-read -e 'SELECT @@server_id'; done"
+#list pods; include 'node name' column
+k get po -o wide
+
+#simulate taking the node running the mysql-2 pod out of service for maintenance:
+node=$(kubectl get pods --field-selector metadata.name=mysql-2 -o=jsonpath='{.items[0].spec.nodeName}')
+kubectl drain $node --force --delete-local-data --ignore-daemonsets # prevents new pods from being scheduled on the node; evicts existing pods scheduled to it
+```

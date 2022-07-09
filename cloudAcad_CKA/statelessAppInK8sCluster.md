@@ -15,3 +15,7 @@ kube-proxy: Network proxy that runs on each node
 kube-scheduler: Control plane process which assigns Pods to Nodes
 metrics-server: Not an essential component of a Kubernetes cluster but it is used in this lab to provide metrics for viewing in the Kubernetes dashboard.
 ```
+
+```
+kubectl get pods -l app=mysql --watch #get pods of a certain label; write any updates to the output
+```

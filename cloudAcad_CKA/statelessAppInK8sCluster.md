@@ -36,5 +36,15 @@ k get po -o wide
 #simulate taking the node running the mysql-2 pod out of service for maintenance:
 node=$(kubectl get pods --field-selector metadata.name=mysql-2 -o=jsonpath='{.items[0].spec.nodeName}')
 kubectl drain $node --force --delete-local-data --ignore-daemonsets # prevents new pods from being scheduled on the node; evicts existing pods scheduled to it
-k get po -o wide --watch # Watch the mysql-2 pod get rescheduled to a different node:
+k get po -o wide --watch # Watch the mysql-2 pod get rescheduled to a different node
+kubectl uncordon $node #Uncordon the node you drained so that pods can be scheduled on it again
+
+kubectl delete pod mysql-2 # Delete the mysql-2 pod to simulate a node failure
+kubectl get pod mysql-2 -o wide --watch # watch it get rescheduled automatically
+
+kubectl scale --replicas=5 statefulset mysql
+kubectl get pods -l app=mysql --watch
+
+#verify you see new MySQL server IDs
+kubectl run mysql-client-loop --image=mysql:5.7 -i -t --rm --restart=Never -- bash -ic "while sleep 1; do /usr/bin/mysql -h mysql-read -e 'SELECT @@server_id'; done"
 ```

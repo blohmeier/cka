@@ -836,24 +836,82 @@ k -n project-snake exec backend-0 -- curl -m 10 -s <IPs 1-3 from above with port
 ### Q25 | Etcd Snapshot Save and Restore | 8% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c3-CCC</p>
-<p>1of3 Make a backup of etcd running on cluster3-master1 and save it on the master node at /tmp/etcd-backup.db.</p>
-<p>2of3 Then create a Pod of your kind in the cluster./p>
-<p>3of3 Finally restore the backup, confirm the cluster is still working and that the created Pod is no longer with us.</p>
+<p>1. Make a backup of etcd running on cluster3-master1 and save it on the master node at /tmp/etcd-backup.db.</p>
+<p>2. Then create a Pod of your kind in the cluster./p>
+<p>3. Finally restore the backup, confirm the cluster is still working and that the created Pod is no longer with us.</p>
 </summary>
 <p>
   
 ```bash
-ssh cluster3-master1
-#TWO WAYS to get authentication info necessary to create snapshot of etcd:
-#FIRST WAY:
-cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep etcd
-#SECOND WAY:
-vim /etc/kubernetes/manifests/etcd.yaml #read from various areas of this file.
+1.
+ssh cluster3-master1 #TWO STEPS for getting snapshot info -- STEP 1of2 - get info for SAVING the snapshot -- STEP 2of2 - get info for RESTORING the snapshot
+#STEP 1of2 - get info for SAVING the snapshot
+vim /etc/kubernetes/manifests/etcd.yaml #read from various areas of this file:
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    component: etcd
+    tier: control-plane
+  name: etcd
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - etcd
+    - --advertise-client-urls=https://192.168.100.31:2379
+    - --cert-file=/etc/kubernetes/pki/etcd/server.crt                           # saveRestore2of3
+    - --client-cert-auth=true
+    - --data-dir=/var/lib/etcd
+    - --initial-advertise-peer-urls=https://192.168.100.31:2380
+    - --initial-cluster=cluster3-master1=https://192.168.100.31:2380
+    - --key-file=/etc/kubernetes/pki/etcd/server.key                            # saveRestore3of3
+    - --listen-client-urls=https://127.0.0.1:2379,https://192.168.100.31:2379   # use (?)
+    - --listen-metrics-urls=http://127.0.0.1:2381
+    - --listen-peer-urls=https://192.168.100.31:2380
+    - --name=cluster3-master1
+    - --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt
+    - --peer-client-cert-auth=true
+    - --peer-key-file=/etc/kubernetes/pki/etcd/peer.key
+    - --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt                    # saveRestore1of3
+    - --snapshot-count=10000
+    - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+    image: k8s.gcr.io/etcd:3.3.15-0
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 8
+      httpGet:
+        host: 127.0.0.1
+        path: /health
+        port: 2381
+        scheme: HTTP
+      initialDelaySeconds: 15
+      timeoutSeconds: 15
+    name: etcd
+    resources: {}
+    volumeMounts:
+    - mountPath: /var/lib/etcd
+      name: etcd-data
+    - mountPath: /etc/kubernetes/pki/etcd
+      name: etcd-certs
+  hostNetwork: true
+  priorityClassName: system-cluster-critical
+  volumes:
+  - hostPath:
+      path: /etc/kubernetes/pki/etcd
+      type: DirectoryOrCreate
+    name: etcd-certs
+  - hostPath:
+      path: /var/lib/etcd                                                     # important
+      type: DirectoryOrCreate
+    name: etcd-data
+status: {}
 
-#Now are ready to create snapshot:
+#Now are ready to create snapshot from saverestore1of3 thru saveRestore3of3 above:
 ETCDCTL_API=3 etcdctl snapshot save /tmp/etcd-backup.db --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key
 
-2of3
+2.
 kubectl run test --image=nginx; kubectl get pod -l run=test -w #create po and watch til it's running
 cd /etc/kubernetes/manifests/; mv * ..; watch crictl ps #stop all controlplane components
 ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd-backup.db --data-dir /var/lib/etcd-backup --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key #restore the snapshot to a specific dir.

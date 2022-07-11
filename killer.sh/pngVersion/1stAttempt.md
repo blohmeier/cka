@@ -24,7 +24,7 @@
 
 <details><summary> Q7 | Node and Pod Resource Usage | 1% </summary><p>
 
-  ![q7a](../images/q7a.png) ![q2b](../images/q2b.png)</p> </details>
+  ![q7](../images/q7.png) </p> </details>
 
 <details><summary> Q8 | Get Master Information | 2% </summary><p>
 

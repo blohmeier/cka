@@ -20,7 +20,7 @@
 
 <details><summary> Q6 | Storage, PV, PVC, Pod volume | 8% </summary><p>
 
-  ![q6](../images/q6.png) </p> </details>
+  ![q6a](../images/q6a.png) ![q6b](../images/q6b.png)</p> </details>
 
 <details><summary> Q7 | Node and Pod Resource Usage | 1% </summary><p>
 

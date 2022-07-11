@@ -88,7 +88,7 @@
 
 <details><summary> Q23 | Kubelet client/server cert info | 2% </summary><p>
 
-  ![q23a](../images/q23a.png) ![q23b](../images/q23b.png) ![q23c](../images/q23c.png)</p> </details>
+  ![q23](../images/q23.png) </p> </details>
 
 <details><summary> Q24 | NetworkPolicy | 9% </summary><p>
 

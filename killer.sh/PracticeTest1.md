@@ -364,27 +364,27 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    id: very-important                  # change
+    id: very-important                                      # change
   name: deploy-important
-  namespace: project-tiger              # important
+  namespace: project-tiger                                 
 spec:
-  replicas: 3                           # change
+  replicas: 3                                               # change
   selector:
     matchLabels:
-      id: very-important                # change
+      id: very-important                                    # change
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        id: very-important              # change
+        id: very-important                                  # change
     spec:
       containers:
       - image: nginx:1.17.6-alpine
-        name: container1                # change
+        name: container1                                    # change
         resources: {}
-      - image: kubernetes/pause         # add
-        name: container2                # add
+      - image: kubernetes/pause                             # add
+        name: container2                                    # add
       affinity:                                             # add
         podAntiAffinity:                                    # add
           requiredDuringSchedulingIgnoredDuringExecution:   # add

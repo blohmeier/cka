@@ -28,7 +28,7 @@
 
 <details><summary> Q8 | Get Master Information | 2% </summary><p>
 
-  ![q8](../images/q3.png) </p> </details>
+  ![q8a](../images/q8a.png) ![q8b](../images/q8b.png) </p> </details>
 
 <details><summary> Q9 | Kill Scheduler, Manual Scheduling | 5% </summary><p>
 

@@ -725,7 +725,7 @@ k get svc,ep -l run=my-static-pod
 <p>Use context: kubectl config use-context k8s-c2-AC</p>
 <p>1of3 Check how long the kube-apiserver server certificate is valid on cluster2-master1. Do this with openssl or cfssl. Write the exipiration date into /opt/course/22/expiration.</p>
 <p>2of3 Also run the correct kubeadm command to list the expiration dates and confirm both methods show the same date.</p>
-<p>Write the correct kubeadm command that would renew the apiserver server certificate into /opt/course/22/kubeadm-renew-certs.sh.</p>
+<p>3of3 Write the correct kubeadm command that would renew the apiserver server certificate into /opt/course/22/kubeadm-renew-certs.sh.</p>
 </summary>
 <p>
   

@@ -37,3 +37,43 @@
 <details><summary> Q10 | RBAC ServiceAccount Role RoleBinding | 6% </summary><p>
 
   ![q10a](../images/q10a.png) ![q10b](../images/q10b.png)</p> </details>
+
+<details><summary> Q1 | Contexts | 1% </summary><p>
+
+  ![q11](../images/q11.png) </p> </details>
+
+<details><summary> Q12 | Schedule Pod on Master Node | 3% </summary><p>
+
+  ![q12a](../images/q12a.png) ![q12b](../images/q12b.png)</p> </details>
+
+<details><summary> Q13 | Scale down StatefulSet | 1% </summary><p>
+
+  ![q13](../images/q13.png) </p> </details>
+
+<details><summary> Q14 | Pod Ready if Service is reachable | 4% </summary><p>
+
+  ![q14a](../images/q14a.png) ![q14b](../images/q14b.png)</p> </details>
+
+<details><summary> Q15 | Kubectl sorting | 1% </summary><p>
+
+  ![q15](../images/q15.png) </p> </details>
+
+<details><summary> Q16 | Storage, PV, PVC, Pod volume | 8% </summary><p>
+
+  ![q16a](../images/q16a.png) ![q6b](../images/q16b.png)</p> </details>
+
+<details><summary> Q17 | Node and Pod Resource Usage | 1% </summary><p>
+
+  ![q17a](../images/q17a.png) ![q17b](../images/q17b.png)</p> </details>
+
+<details><summary> Q18 | Get Master Information | 2% </summary><p>
+
+  ![q18a](../images/q18a.png) ![q18b](../images/q18b.png) </p> </details>
+
+<details><summary> Q19 | Kill Scheduler, Manual Scheduling | 5% </summary><p>
+
+  ![q19a](../images/q9a.png) ![q19b](../images/q9b.png) ![q19c](../images/q9c.png)</p> </details>
+
+<details><summary> Q20 | RBAC ServiceAccount Role RoleBinding | 6% </summary><p>
+
+  ![q20a](../images/q20a.png) ![q20b](../images/q20b.png)</p> </details>

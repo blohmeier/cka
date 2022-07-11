@@ -844,8 +844,8 @@ k -n project-snake exec backend-0 -- curl -m 10 -s <IPs 1-3 from above with port
   
 ```bash
 1.
-ssh cluster3-master1 #TWO STEPS for getting snapshot info -- STEP 1of2 - get info for SAVING the snapshot -- STEP 2of2 - get info for RESTORING the snapshot
-#STEP 1of2 - get info for SAVING the snapshot
+ssh cluster3-master1
+#get info for SAVING and RESTORING the snapshot
 vim /etc/kubernetes/manifests/etcd.yaml #read from various areas of this file:
 apiVersion: v1
 kind: Pod
@@ -914,7 +914,11 @@ ETCDCTL_API=3 etcdctl snapshot save /tmp/etcd-backup.db --cacert /etc/kubernetes
 2.
 kubectl run test --image=nginx; kubectl get pod -l run=test -w #create po and watch til it's running
 cd /etc/kubernetes/manifests/; mv * ..; watch crictl ps #stop all controlplane components
-ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd-backup.db --data-dir /var/lib/etcd-backup --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key #restore the snapshot to a specific dir.
+
+3.
+#now, restore the snapshot to a specific dir:
+ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd-backup.db --data-dir /var/lib/etcd-backup --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key
+  
 vim /etc/kubernetes/etcd.yaml #tell etcd to use restored files located at new dir /var/lib/etcd-backup by changing spec.volumes.hostPath for name:etcd-data to path: /var/lib/etcd-backup
 mv ../*.yaml .; watch crictl ps #move all controlplane yaml into manifest dir. Give time (could be several mins) for etcd to restart and for api-server to be reachable again.
 kubectl get pod -l run=test #confirms backup and restore worked as the pod is now gone.

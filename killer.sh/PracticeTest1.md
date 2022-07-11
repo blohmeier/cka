@@ -723,23 +723,24 @@ k get svc,ep -l run=my-static-pod
 ### Q22 | Check how long certificates are valid | 2% ###
 <details><summary>
 <p>Use context: kubectl config use-context k8s-c2-AC</p>
-<p>1of3 Check how long the kube-apiserver server certificate is valid on cluster2-master1. Do this with openssl or cfssl. Write the exipiration date into /opt/course/22/expiration.</p>
-<p>2of3 Also run the correct kubeadm command to list the expiration dates and confirm both methods show the same date.</p>
-<p>3of3 Write the correct kubeadm command that would renew the apiserver server certificate into /opt/course/22/kubeadm-renew-certs.sh.</p>
+<p>1. Check how long the kube-apiserver server certificate is valid on cluster2-master1. Do this with openssl or cfssl. Write the exipiration date into /opt/course/22/expiration.</p>
+<p>2. Also run the correct kubeadm command to list the expiration dates and confirm both methods show the same date.</p>
+<p>3. Write the correct kubeadm command that would renew the apiserver server certificate into /opt/course/22/kubeadm-renew-certs.sh.</p>
 </summary>
 <p>
   
 ```bash
+1of3
 ssh cluster2-master1; find /etc/kubernetes/pki | grep apiserver #find kube-apiserver certificate.
 openssl x509  -noout -text -in /etc/kubernetes/pki/apiserver.crt | grep Validity -A2 #output following "Not After :" will be copied to /opt/course/22/expiration at main terminal i.e.:
 exit
 echo -e "Jun 21 11:00:42 2023 GMT" >> /opt/course/22/expiration
-1of3 end
-2of3 start
+
+2of3
 ssh cluster2-master1 kubeadm certs check-expiration | grep apiserver #match date to output from 1of3
 exit
-2of3 end
-3of3 start
+
+3of3
 echo -e "kubeadm certs renew apiserver" >> /opt/course/22/kubeadm-renew-certs.sh
 ```
 </p>

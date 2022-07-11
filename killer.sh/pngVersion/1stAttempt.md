@@ -17,3 +17,23 @@
 <details><summary> Q5 | Kubectl sorting | 1% </summary><p>
 
   ![q5](../images/q5.png) </p> </details>
+
+<details><summary> Q6 | Storage, PV, PVC, Pod volume | 8% </summary><p>
+
+  ![q6](../images/q6.png) </p> </details>
+
+<details><summary> Q7 | Node and Pod Resource Usage | 1% </summary><p>
+
+  ![q7a](../images/q7a.png) ![q2b](../images/q2b.png)</p> </details>
+
+<details><summary> Q8 | Get Master Information | 2% </summary><p>
+
+  ![q8](../images/q3.png) </p> </details>
+
+<details><summary> Q9 | Kill Scheduler, Manual Scheduling | 5% </summary><p>
+
+  ![q9a](../images/q4a.png) ![q4b](../images/q4b.png)</p> </details>
+
+<details><summary> Q10 | RBAC ServiceAccount Role RoleBinding | 6% </summary><p>
+
+  ![q10](../images/q10.png) </p> </details>

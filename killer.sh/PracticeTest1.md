@@ -316,7 +316,7 @@ metadata:
     id: ds-important                                # changed from app: ds-important
     uuid: 18426a0b-5f59-4e10-923f-c0e078e82462      # add
   name: ds-important
-  namespace: project-tiger                          # add
+  namespace: project-tiger                          
 spec:
   selector:
     matchLabels:

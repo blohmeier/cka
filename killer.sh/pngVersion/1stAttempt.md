@@ -84,7 +84,7 @@
 
 <details><summary> Q22 | Check how long certificates are valid | 2% </summary><p>
 
-  ![q22a](../images/q22a.png) ![q22b](../images/q22b.png)</p> </details>
+  ![q22](../images/q22.png) </p> </details>
 
 <details><summary> Q23 | Kubelet client/server cert info | 2% </summary><p>
 

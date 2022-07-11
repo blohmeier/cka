@@ -44,7 +44,7 @@
 
 <details><summary> Q12 | Deployment on all Nodes | 6% </summary><p>
 
-  ![q12a](../images/q12a.png) ![q12b](../images/q12b.png)</p> </details>
+  ![q12a](../images/q12a.png) ![q12b](../images/q12b.png) ![q12c](../images/q12c.png)</p> </details>
 
 <details><summary> Q13 | Multi Containers and Pod shared Volume | 4% </summary><p>
 

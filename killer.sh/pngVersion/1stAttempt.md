@@ -40,7 +40,7 @@
 
 <details><summary> Q11 | DaemonSet on all Nodes | 4% </summary><p>
 
-  ![q11](../images/q11.png) </p> </details>
+  ![q11a](../images/q11a.png) ![q11b](../images/q11b.png)</p> </details>
 
 <details><summary> Q12 | Deployment on all Nodes | 6% </summary><p>
 

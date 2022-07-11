@@ -36,4 +36,4 @@
 
 <details><summary> Q10 | RBAC ServiceAccount Role RoleBinding | 6% </summary><p>
 
-  ![q10](../images/q10.png) </p> </details>
+  ![q10a](../images/q10a.png) ![q10b](../images/q10b.png)</p> </details>

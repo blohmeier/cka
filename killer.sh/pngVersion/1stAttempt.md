@@ -76,7 +76,7 @@
 
 <details><summary> Q20 | Update Kubernetes Version and join cluster | 10% </summary><p>
 
-  ![q20a](../images/q20a.png) ![q20b](../images/q20b.png)</p> </details>
+  ![q20a](../images/q20a.png) ![q20b](../images/q20b.png) ![q20c](../images/q20c.png)</p> </details>
 
 <details><summary> Q21 | Update Kubernetes Version and join cluster | 10% </summary><p>
 

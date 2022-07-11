@@ -96,4 +96,4 @@
 
 <details><summary> Q25 | Etcd Snapshot Save and Restore | 8% </summary><p>
 
-  ![q25a](../images/q25a.png) ![q25b](../images/q25b.png)</p> </details>
+  ![q25a](../images/q25a.png) ![q25b](../images/q25b.png) ![q25c](../images/q25c.png)</p> </details>

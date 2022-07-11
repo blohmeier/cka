@@ -64,7 +64,7 @@
 
 <details><summary> Q17 | Find Container of Pod and check info | 3% </summary><p>
 
-  ![q17a](../images/q17a.png) ![q17b](../images/q17b.png)</p> </details>
+  ![q17a](../images/q17.png)</p> </details>
 
 <details><summary> Q18 | Fix Kubelet | 8% </summary><p>
 

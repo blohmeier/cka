@@ -1,0 +1,352 @@
+1
+k config get-contexts -o name > /opt/course/1/contexts; k config view -o jsonpath='{.contexts[*].name}' | tr " " "\n" > /opt/course/1/contexts
+echo -e "kubectl config current-context" > /opt/course/1/context_default_kubectl.sh
+echo -e "cat ~/.kube/config | grep current | sed -e 's/current-context: //'" > /opt/course/1/context_default_no_kubectl.sh
+
+2
+k describe node <master node from 'k get no'> | grep Taint ; k describe node <master node from 'k get no'> | grep Labels -A 10
+
+k run pod1 --image=httpd:2.4.41-alpine $dy > 2.yml; vim 2.yml #edit as follows, then k create -f 2.yml:
+name: pod1-container                  		# change under spec.containers; add the following under spec:
+tolerations:                            	
+- effect: NoSchedule                    	
+  key: node-role.kubernetes.io/master   	
+nodeSelector:                           	
+  node-role.kubernetes.io/master: ""    	
+
+echo -e "master nodes usually have a taint defined" > /opt/course/2/master_schedule_reason
+
+3
+k -n project-c13 scale sts o3db --replicas 1 --record
+
+4
+#"Do the following in ns default ...":
+k run ready-if-service-ready --image=nginx:1.16.1-alpine $dy > 4_pod1.yml
+vim 4_pod1.yml #add under spec.containers:
+livenessProbe:                               
+      exec:
+        command:
+        - 'true'
+    readinessProbe:
+      exec:
+        command:
+        - sh
+        - -c
+        - 'wget -T2 -O- http://service-am-i-ready:80'
+k create -f 4_pod1.yml
+k get po ready-if-service-ready #shows "READY 0/1"
+
+#"Create a second pod ..." & "Now the first pod should be in a ready state...":
+k run am-i-ready --image=nginx:1.16.1-alpine --labels="id=cross-server-ready"
+k get po ready-if-service-ready #shows "READY 1/1"
+
+5
+echo -e 'kubectl get pod -A --sort-by=.metadata.creationTimestamp' > /opt/course/5/find_pods.sh
+echo -e 'kubectl get pod -A --sort-by=.metadata.uid' > /opt/course/5/find_pods_uid.sh
+
+6
+#to mount volume after creating pv and pvc, must alter deployment manifest file yaml in TWO areas:
+#FIRST, under spec, add:
+volumes:                                      
+- name: data                       	#match "name" below
+  persistentVolumeClaim:                      
+    claimName: safari-pvc			#from new pvc
+#SECOND, under spec.containers, add:
+volumeMounts:                        
+- name: data                        #match "name" above
+  mountPath: /tmp/safari-data       #given in problem
+ 
+7
+echo -e 'kubectl top node' > /opt/course/7/node.sh
+echo -e 'kubectl top pod --containers=true' > /opt/course/7/pod.sh
+
+8
+ssh cluster1-master1
+find /etc/systemd/system/ | grep 'kube\|etcd' #only 3 svcs named kube or etcd so is a kubeadm cluster; next command needed
+k -n kube-system get pod -o wide | grep master1 #shows 5 static pods with -cluster1-master1 suffix.
+k -n kube-system get deploy
+
+9
+#1of4:stop kube-scheduler (can restart later)
+ssh cluster2-master1
+k -n kube-system get pod | grep schedule 			#confirm scheduler runs
+mv /etc/kubernetes/manifests/kube-scheduler.yaml .. #temporarily kill scheduler
+k -n kube-system get pod | grep schedule 			#confirm scheduler stopped
+exit 												#leave master node
+#2of4:create manual-schedule pod; confirm is created but not scheduled on any node; make edits to result in being scheduled on master node.
+k run manual-schedule --image=httpd:2.4-alpine
+k get po manual-schedule -o wide 					#confirm no node assigned
+k get pod manual-schedule -o yaml > 9.yml 
+vim 9.yml 											#add under .spec: 
+nodeName: cluster2-master1
+k replace -f 9.yml --force
+k get po manual-schedule -o wide 					#confirm node assigned
+#3of4:restart scheduler
+ssh cluster2-master1
+mv kube-scheduler.yaml /etc/kubernetes/manifests/
+k -n kube-system get pod | grep schedule 			#confirm scheduler runs again
+exit 												#leave master node
+#4of4: schedule second test pod, confirm is running to prove scheduler back to normal
+k run manual-schedule2 --image=httpd:2.4-alpine #schedule second test pod
+k get po -o wide | grep schedule #confirm both pods running - i.e. scheduler back to normal
+
+10
+k -n project-hamster create sa processor
+k -n project-hamster create role processor --verb=create --resource=secret --resource=configmap
+k -n project-hamster create rolebinding processor --role processor --serviceaccount project-hamster:processor
+
+11
+k -n project-tiger create deploy --image=httpd:2.4-alpine ds-important $dy > 11_ds.yml #convert to ds by adding/editing at three places: kind; metadata.labels. spec.selector.matchlabels, spec.template.metadata.labels; spec.template.spec.resources.
+k create -f 11_ds.yml
+k -n project-tiger get pod -l id=ds-important -o wide #ds runs on all nodes
+
+12
+k -n project-tiger create deploy --image=nginx:1.17.6-alpine deploy-important $dy > 12.yml
+vim 12.yml ; k create -f 12.yml # create the necessary config via podAntiAffinity {Manifest not included}
+k -n project-tiger get deploy -l id=very-important #confirm shows READY: 2/3 
+k -n project-tiger get pod -o wide -l id=very-important #confirm shows 1 Pod on each of the 2 worker nodes, 3rd Pod not scheduled
+k -n project-tiger describe pod deploy-important-5c99c99d4d-4rt9k | grep -i events -A5 #among other things, shows under Message: 0/3 nodes are available: 1 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn't tolerate, 2 node(s) didn't match pod anti-affinity rules 
+
+13
+k run multi-container-playground --image=nginx:1.17.6-alpine $dy > 13.yml
+vim 13.yml # edit c1, c2, c3 to:
+#c1 -- env var MY_NODE_NAME value: node name where Pod runs
+#c2 -- write "date" op to shared 'vol' at 'date.log':
+while true; do date >> /vol/date.log; sleep 1; done 
+#c3 -- constantly send 'date.log' from shared 'vol' to stdout:
+tail -f /vol/date.log 
+
+#confirm all req'ts met:
+k exec multi-container-playground -c c1 -- env | grep MY #c1 has requested env var of "MY_NODE_NAME=spec.nodeName"
+k logs multi-container-playground -c c3 # /vol/date.log created; logs show output of date command
+
+14
+k get no #number of master and worker nodes available (1 and 2).
+ssh <master node name from k get no>; cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep range #service CIDR (3).
+find /etc/cni/net.d/; cat /etc/cni/net.d/10-weave.conflist #Determine which n/w (or CNI plugin) is configured and where its config file is (4).
+#for (5), 'suffix' is the node hostname (from the ___???___ command output) with a leading hyphen.
+
+15
+echo -e "kubectl get events -A --sort-by=.metadata.creationTimestamp" >> /opt/course/15/cluster_events.sh
+k -n kube-system delete pod <pod running on cluster2-worker1 from command: k -n kube-system get pod -o wide | grep proxy>
+sh /opt/course/15/cluster_events.sh >> /opt/course/15/pod_kill.log
+ssh cluster2-worker1 ; crictl rm <id output from command: crictl ps | grep kube-proxy> ; ?exit?
+sh /opt/course/15/cluster_events.sh >> /opt/course/15/container_kill.log
+
+16
+k create ns cka-master
+k api-resources --namespaced -o name > /opt/course/16/resources.txt
+k -n project-* get role --no-headers | wc -l ; echo -e 'project-c14 with 300 resources' >> /opt/course/16/crowded-namespace.txt
+
+17
+k -n project-tiger run tigers-reunite --image=httpd:2.4.41-alpine --labels "pod=container,container=pod"
+k -n project-tiger get pod tigers-reunite -o jsonpath="{.spec.nodeName}"
+ssh <{.spec.nodeName}> #from above command
+crictl ps | grep tigers-reunite #<ANSWER 1> -- MAY have to first: apt-get update; apt install crictl
+crictl inspect <ANSWER 1> | grep runtimeType #<ANSWER 2>
+exit
+echo -e '<ANSWER 1> <ANSWER 2>' >> /opt/course/17/pod-container.txt
+ssh cluster1-worker2 'crictl logs <ANSWER 1>' &> /opt/course/17/pod-container.log #redirects stdout and stderr 
+
+18
+k get no #reveals cluster3-worker1 node not ready
+ssh cluster3-worker1; ps aux | grep kubelet #confirms kubelet is not running
+service kubelet status #reveals kubelet is inactive and config'd (as svc) with .conf file at /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+service kubelet start; service kubelet status #start failed, but confirms is trying to execute /usr/local/bin/kubelet using params defined in /etc/systemd/system/kubelet.service.d/10-kubeadm.conf.
+#TWO WAYS to find more errors and get more logs (here, lets you find out the problem - "wrong path specified"):
+#FIRST: run command manually (usually also w/ its params):
+/usr/local/bin/kubelet; whereis kubelet 
+#SECOND: view extended logging of hte kubelet svc:
+journalctl -u kubelet 					
+#Fix the problem. Then to complete the fix, run:
+vim /etc/systemd/system/kubelet.service.d/10-kubeadm.conf #delete "/local" to result in: "/usr/bin/kubelet"
+#Then to complete the fix:
+systemctl daemon-reload && systemctl restart kubelet
+systemctl status kubelet #should now show as "Active (running)
+exit
+k get no #reveals all nodes are now ready
+
+19
+k create ns secret
+cp /opt/course/19/secret1.yaml 19_secret1.yml
+vim 19_secret1.yml #under .metadata:
+namespace: secret #changed from namespace: todo
+k create -f 19_secret1.yml
+
+k -n secret create secret generic secret2 --from-literal=user=user1 --from-literal=pass=1234
+
+k -n secret run secret-pod --image=busybox:1.31.1 $dy -- sh -c "sleep 5d" > 19_pod.yml
+vim 19_pod.yml #edit to (1) Make secret1 avail by mounting it as a volumemount in the pod (2) make secret2 entries (user, pass) avail as env vars in the pod (3) keep pod running for some time (4) make pod able to run on master nodes through use of toleration
+
+#confirm all is correct:
+k -n secret exec secret-pod -- env | grep APP
+k -n secret exec secret-pod -- find /tmp/secret1 #identify file to "cat" below
+k -n secret exec secret-pod -- cat /tmp/secret1/halt
+
+20
+k get no #reveals cluster3-master1 runs v1.23.1; confirms cluster3-worker2 is not part of cluster
+ssh cluster3-worker2; kubeadm version; kubectl version; kubelet --version # reveals kubeadm is up to date (i.e. runs v1.23.1) though kubectl and kubelet are not. So can try:
+kubeadm upgrade node #error means node was never initialized (so nothing to update) - can do later with kubeadm join. For now, update kubelet and kubectl:
+apt update; apt show kubectl -a | grep 1.23; apt install kubectl=1.23.1-00 kubelet=1.23.1-00; kubectl version; kubelet --version #updates kubelet and kubectl and confirms versions have been updated to v1.23.1.
+systemctl restart kubelet; service kubelet status #restarts kubelet (ignore errors and move to next step to generate join command)
+exit
+#add cluster3-worker2 to cluster:
+ssh cluster3-master1; kubeadm token create --print-join-command #log into master1, generate new TLS bootstrap token (also prints join command)
+exit
+ssh cluster3-worker2; <enter join command from above>
+exit
+k get no #reveals cluster3-worker2 has been added to cluster and is up to date
+
+21
+ssh cluster3-master1 ; kubectl run my-static-pod --image=nginx:1.16-alpine --dry-run=client -o yaml > /etc/kubernetes/manifests/my-static-pod.yml #edit to add resource requests
+exit
+k expose pod my-static-pod-cluster3-master1 --name static-pod-service --type=NodePort --port 80
+k get svc,ep -l run=my-static-pod
+
+22
+1.
+ssh cluster2-master1; find /etc/kubernetes/pki | grep apiserver #find kube-apiserver certificate.
+openssl x509 -noout -text -in /etc/kubernetes/pki/apiserver.crt | grep Validity -A2 #COPY the output following "Not After :" will be copied to /opt/course/22/expiration at main terminal.
+exit
+echo -e "Jun 21 11:00:42 2023 GMT" >> /opt/course/22/expiration #retrieved from COPY of output following "Not After :" in cluster2-master1.
+
+2.
+ssh cluster2-master1 kubeadm certs check-expiration | grep apiserver #match date to output from 1of3
+exit
+
+3.
+echo -e "kubeadm certs renew apiserver" >> /opt/course/22/kubeadm-renew-certs.sh
+
+23
+#get kubelet cert info for copying to k8s@terminal:/opt/course/23/certificate-info.txt:
+ssh cluster2-worker1 
+openssl x509  -noout -text -in /var/lib/kubelet/pki/kubelet-client-current.pem | grep -i 'issuer\|extended' -A2 #client cert info
+openssl x509  -noout -text -in /var/lib/kubelet/pki/kubelet.crt | grep -i 'issuer\|extended' -A2 #server cert info
+exit
+echo -e "Issuer: CN = kubernetes" >> /opt/course/23/certificate-info.txt
+echo -e "Extended Key Usage: TLS Web Client Authentication" >> /opt/course/23/certificate-info.txt
+echo -e "Issuer: CN = cluster2-worker1-ca@1641549536" >> /opt/course/23/certificate-info.txt
+echo -e "Extended Key Usage: TLS Web Client Authentication" >> /opt/course/23/certificate-info.txt
+
+24
+k -n project-snake get pod -L app #check existing pods and their labels
+man curl | grep -- -s #OPTIONAL - gets info on -s flag used below. Source: https://unix.stackexchange.com/questions/324141/grep-the-man-page-of-a-command-for-hyphenated-options
+#to confirm no "backend-*" pod is restricted:
+k -n project-snake get po -o wide #get IPS (1-3) of pods other than backend-*: 1=db1-0, 2=db2-0, 3=vault-0
+k -n project-snake exec backend-0 -- curl -m 10 -s <IPs 1-3 from above with ports i.e., IP1:1111, IP2:2222 etc.> #confirms output of: database one, database two, vault secret storage
+
+vim 24_np.yml #create netpol; changes are as compared to k8s docs:
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: np-backend
+  namespace: project-snake
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+    - Egress                        # policy is only about Egress
+  egress:
+    -                               # first rule
+      to:                           # first condition "to"
+      - podSelector:
+          matchLabels:
+            app: db1
+      ports:                        # second condition "port"
+      - protocol: TCP
+        port: 1111
+    -                               # second rule
+      to:                           # first condition "to"
+      - podSelector:
+          matchLabels:
+            app: db2
+      ports:                        # second condition "port"
+      - protocol: TCP
+        port: 2222
+
+k create -f 24_np.yml
+
+#retest below; first two should work, third should not:
+k -n project-snake exec backend-0 -- curl -m 10 -s <IPs 1-3 from above with ports i.e., IP1:1111, IP2:2222 etc.> #confirms output of: database one, database two, vault secret storage
+
+25
+1.
+ssh cluster3-master1
+#get info for SAVING and RESTORING the snapshot
+vim /etc/kubernetes/manifests/etcd.yaml #read from various areas of this file:
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    component: etcd
+    tier: control-plane
+  name: etcd
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - etcd
+    - --advertise-client-urls=https://192.168.100.31:2379
+    - --cert-file=/etc/kubernetes/pki/etcd/server.crt                           # saveRestore2of3
+    - --client-cert-auth=true
+    - --data-dir=/var/lib/etcd
+    - --initial-advertise-peer-urls=https://192.168.100.31:2380
+    - --initial-cluster=cluster3-master1=https://192.168.100.31:2380
+    - --key-file=/etc/kubernetes/pki/etcd/server.key                            # saveRestore3of3
+    - --listen-client-urls=https://127.0.0.1:2379,https://192.168.100.31:2379   # use (?)
+    - --listen-metrics-urls=http://127.0.0.1:2381
+    - --listen-peer-urls=https://192.168.100.31:2380
+    - --name=cluster3-master1
+    - --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt
+    - --peer-client-cert-auth=true
+    - --peer-key-file=/etc/kubernetes/pki/etcd/peer.key
+    - --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt                    # saveRestore1of3
+    - --snapshot-count=10000
+    - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+    image: k8s.gcr.io/etcd:3.3.15-0
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 8
+      httpGet:
+        host: 127.0.0.1
+        path: /health
+        port: 2381
+        scheme: HTTP
+      initialDelaySeconds: 15
+      timeoutSeconds: 15
+    name: etcd
+    resources: {}
+    volumeMounts:
+    - mountPath: /var/lib/etcd
+      name: etcd-data
+    - mountPath: /etc/kubernetes/pki/etcd
+      name: etcd-certs
+  hostNetwork: true
+  priorityClassName: system-cluster-critical
+  volumes:
+  - hostPath:
+      path: /etc/kubernetes/pki/etcd
+      type: DirectoryOrCreate
+    name: etcd-certs
+  - hostPath:
+      path: /var/lib/etcd                                                     # important
+      type: DirectoryOrCreate
+    name: etcd-data
+status: {}
+
+#Now are ready to create snapshot from saverestore1of3 thru saveRestore3of3 above:
+ETCDCTL_API=3 etcdctl snapshot save /tmp/etcd-backup.db --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key
+
+2.
+kubectl run test --image=nginx; kubectl get pod -l run=test -w #create po and watch til it's running
+cd /etc/kubernetes/manifests/; mv * ..; watch crictl ps #stop all controlplane components
+
+3.
+#now, restore the snapshot to a specific dir:
+ETCDCTL_API=3 etcdctl snapshot restore /tmp/etcd-backup.db --data-dir /var/lib/etcd-backup --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key
+  
+vim /etc/kubernetes/etcd.yaml #tell etcd to use restored files located at new dir /var/lib/etcd-backup by changing spec.volumes.hostPath for name:etcd-data to path: /var/lib/etcd-backup
+mv ../*.yaml .; watch crictl ps #move all controlplane yaml into manifest dir. Give time (could be several mins) for etcd to restart and for api-server to be reachable again.
+kubectl get pod -l run=test #confirms backup and restore worked as the pod is now gone.

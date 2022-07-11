@@ -3,10 +3,10 @@
 </summary>
 <p>
   
-```bash
+
 
 ![q1](../images/q1.png)
 
-```
+
 </p>
 </details>

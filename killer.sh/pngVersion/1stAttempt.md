@@ -62,18 +62,18 @@
 
   ![q16a](../images/q16a.png) ![q6b](../images/q16b.png)</p> </details>
 
-<details><summary> Q17 | Node and Pod Resource Usage | 1% </summary><p>
+<details><summary> Q17 | Find Container of Pod and check info | 3% </summary><p>
 
   ![q17a](../images/q17a.png) ![q17b](../images/q17b.png)</p> </details>
 
-<details><summary> Q18 | Get Master Information | 2% </summary><p>
+<details><summary> Q18 | Fix Kubelet | 8% </summary><p>
 
   ![q18a](../images/q18a.png) ![q18b](../images/q18b.png) </p> </details>
 
-<details><summary> Q19 | Kill Scheduler, Manual Scheduling | 5% </summary><p>
+<details><summary> Q19 | Create Secret and mount into Pod | 3% </summary><p>
 
   ![q19a](../images/q9a.png) ![q19b](../images/q9b.png) ![q19c](../images/q9c.png)</p> </details>
 
-<details><summary> Q20 | RBAC ServiceAccount Role RoleBinding | 6% </summary><p>
+<details><summary> Q20 | Update Kubernetes Version and join cluster | 10% </summary><p>
 
   ![q20a](../images/q20a.png) ![q20b](../images/q20b.png)</p> </details>

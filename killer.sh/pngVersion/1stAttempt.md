@@ -78,6 +78,22 @@
 
   ![q20a](../images/q20a.png) ![q20b](../images/q20b.png) ![q20c](../images/q20c.png)</p> </details>
 
-<details><summary> Q21 | Update Kubernetes Version and join cluster | 10% </summary><p>
+<details><summary> Q21 | Create a Static Pod and Service | 2% </summary><p>
 
   ![q21a](../images/q21a.png) ![q21b](../images/q21b.png)</p> </details>
+
+<details><summary> Q22 | Check how long certificates are valid | 2% </summary><p>
+
+  ![q22a](../images/q22a.png) ![q22b](../images/q22b.png)</p> </details>
+
+<details><summary> Q23 | Kubelet client/server cert info | 2% </summary><p>
+
+  ![q23a](../images/q23a.png) ![q23b](../images/q23b.png) ![q23c](../images/q23c.png)</p> </details>
+
+<details><summary> Q24 | NetworkPolicy | 9% </summary><p>
+
+  ![q24a](../images/q24a.png) ![q24b](../images/q24b.png)</p> </details>
+
+<details><summary> Q25 | Etcd Snapshot Save and Restore | 8% </summary><p>
+
+  ![q25a](../images/q25a.png) ![q25b](../images/q25b.png)</p> </details>

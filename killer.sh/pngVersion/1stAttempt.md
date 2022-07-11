@@ -48,7 +48,7 @@
 
 <details><summary> Q13 | Multi Containers and Pod shared Volume | 4% </summary><p>
 
-  ![q13](../images/q13.png) </p> </details>
+  ![q13a](../images/q13a.png) ![q13b](../images/q13b.png)</p> </details>
 
 <details><summary> Q14 | Find out Cluster Info | 2% </summary><p>
 

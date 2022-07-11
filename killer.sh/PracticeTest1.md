@@ -730,17 +730,17 @@ k get svc,ep -l run=my-static-pod
 <p>
   
 ```bash
-1of3
+1.
 ssh cluster2-master1; find /etc/kubernetes/pki | grep apiserver #find kube-apiserver certificate.
 openssl x509  -noout -text -in /etc/kubernetes/pki/apiserver.crt | grep Validity -A2 #output following "Not After :" will be copied to /opt/course/22/expiration at main terminal i.e.:
 exit
 echo -e "Jun 21 11:00:42 2023 GMT" >> /opt/course/22/expiration
 
-2of3
+2.
 ssh cluster2-master1 kubeadm certs check-expiration | grep apiserver #match date to output from 1of3
 exit
 
-3of3
+3.
 echo -e "kubeadm certs renew apiserver" >> /opt/course/22/kubeadm-renew-certs.sh
 ```
 </p>

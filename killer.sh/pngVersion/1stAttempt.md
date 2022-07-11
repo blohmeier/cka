@@ -32,7 +32,7 @@
 
 <details><summary> Q9 | Kill Scheduler, Manual Scheduling | 5% </summary><p>
 
-  ![q9a](../images/q4a.png) ![q4b](../images/q4b.png)</p> </details>
+  ![q9a](../images/q9a.png) ![q9b](../images/q9b.png) ![q9c](../images/q9c.png)</p> </details>
 
 <details><summary> Q10 | RBAC ServiceAccount Role RoleBinding | 6% </summary><p>
 

@@ -72,7 +72,7 @@
 
 <details><summary> Q19 | Create Secret and mount into Pod | 3% </summary><p>
 
-  ![q19a](../images/q19a.png) ![q19b](../images/q19b.png) ![q19c](../images/q19c.png)</p> </details>
+  ![q19a](../images/q19a.png) ![q19b](../images/q19b.png)</p> </details>
 
 <details><summary> Q20 | Update Kubernetes Version and join cluster | 10% </summary><p>
 

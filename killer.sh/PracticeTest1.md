@@ -103,7 +103,10 @@ livenessProbe:
         - -c
         - 'wget -T2 -O- http://service-am-i-ready:80'
 k create -f 4_pod1.yml
+k get po ready-if-service-ready ; k describe svc service-am-i-ready #confirm not in ready state yet ; get reason.
+k get ep # confirm no ep for svc yet
 k run am-i-ready --image=nginx:1.16.1-alpine --labels="id=cross-server-ready"
+k describe svc service-am-i-ready ; k get ep ; k get po ready-if-service-ready # re-run to show ep is up & po is in ready state.
 ```
 </p>
 </details>

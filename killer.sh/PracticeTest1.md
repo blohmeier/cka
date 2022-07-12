@@ -41,7 +41,8 @@ echo -e 'cat ~/.kube/config | grep current | sed -e "s/current-context: //"' > /
 k get node # find master node
 k describe node cluster1-master1 | grep Taint # yields info for toleration, allowing pod to run on master node. Output: 
   Taints:  node-role.kubernetes.io/master:NoSchedule
-k describe node cluster1-master1 | grep Labels -A 10 | grep -i master # for node selector (except "="). Ensures pod ONLY runs on master node. Output:
+k describe node cluster1-master1 | grep Labels -A 10 | grep -i master # for node selector (except "="). Ensures pod ONLY runs on 
+                                                                      # master node. Output:
   kubernetes.io/hostname=cluster1-master1
   node-role.kubernetes.io/master=
 ??ABOVE: are outputs always identical??

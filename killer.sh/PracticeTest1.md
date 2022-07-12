@@ -39,9 +39,12 @@ echo -e 'cat ~/.kube/config | grep current | sed -e "s/current-context: //"' > /
   
 ```bash
 k get node # find master node
-k describe node cluster1-master1 | grep Taint # get master node taints
-k describe node cluster1-master1 | grep Labels -A 10 # get master node labels
-k get node cluster1-master1 --show-labels # OR: get master node labels
+k describe node cluster1-master1 | grep Taint # yields info for toleration, allowing pod to run on master node. Output: 
+  Taints:  node-role.kubernetes.io/master:NoSchedule
+k describe node cluster1-master1 | grep Labels -A 10 | grep -i master # for node selector (except "="). Ensures pod ONLY runs on master node. Output:
+  kubernetes.io/hostname=cluster1-master1
+  node-role.kubernetes.io/master=
+??ABOVE: are outputs always identical??
 
 k run pod1 --image=httpd:2.4.41-alpine $dy > 2.yml
 vim 2.yml
@@ -52,6 +55,10 @@ name: pod1-container
   key: node-role.kubernetes.io/master
 # add spec.nodeSelector: and add under it:
 node-role.kubernetes.io/master: ""
+
+??ABOVE: why "" after nodeSelector??
+
+k get po pod1 -o wide --watch #confirm pod runs on master node
 
 echo -e 'master nodes usually have a taint defined' > /opt/course/2/master_schedule_reason
 ```

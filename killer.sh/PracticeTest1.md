@@ -73,7 +73,7 @@ echo -e 'master nodes usually have a taint defined' > /opt/course/2/master_sched
 <p>
   
 ```bash
-k -n project-c13 get pod --show-labels | grep o3db #confirm have to work with a stateful set
+k -n project-c13 get pod --show-labels | grep o3db OR BETTER: k -n project-c13 get deploy,sts,ds #confirm o3db is a stateful set
 k -n project-c13 scale sts o3db --replicas 1 --record
 
 ```

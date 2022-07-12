@@ -236,7 +236,8 @@ dns: [TYPE] [NAME]
   
 ```bash
 ssh cluster1-master1
-find /etc/systemd/system/ | grep 'kube\|etcd' #only 3 services named kube or etcd; cluster must have been set up using kubeadm, so know need next command
+find /etc/systemd/system/ | grep 'kube\|etcd' #only 3 services named kube or etcd; cluster must have been set up using kubeadm, / 
+  so know need next command
 k -n kube-system get pod -o wide | grep master1 #shows 5 static pods with -cluster1-master1 suffix.
 k -n kube-system get deploy
 

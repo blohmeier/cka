@@ -12,7 +12,12 @@ EXPIREABLE:
 21 (all items)
 
 </p></details>
-  
+
+<details><summary>Environment Variables</summary>
+
+</p></details>
+
+
 ### Q1 | Contexts | 1% ###
 <details><summary>
 <p> You have access to multiple clusters from your main terminal through kubectl contexts. Write all those context names into /opt/course/1/contexts. </p>
@@ -267,13 +272,13 @@ dns: pod coredns
 
 ```bash
 ssh cluster2-master1
-k -n kube-system get pod | grep schedule #confirm scheduler is running
-mv /etc/kubernetes/manifests/kube-scheduler.yaml .. #temporarily kill the scheduler
-k -n kube-system get pod | grep schedule #confirm scheduler is stopped
-exit #leave ssh
+k -n kube-system get pod | grep schedule                              #confirm scheduler is running
+mv /etc/kubernetes/manifests/kube-scheduler.yaml ..                   #temporarily kill/stop the scheduler
+k -n kube-system get pod | grep schedule                              #confirm scheduler is stopped
+exit                                                                  #leave ssh
 k run manual-schedule --image=httpd:2.4-alpine
-k get pod manual-schedule -o yaml > 9.yml #add under .spec:
-nodeName: cluster2-master1
+k get pod manual-schedule -o yaml > 9.yml ; vim 9.yml                 #edit as follows
+nodeName: cluster2-master1                                            #under .spec -- changed from "cluster2-master1"
 k replace -f 9.yml --force
 k get po manual-schedule -o wide
 #finally, restart scheduler, schedule second test pod, confirm it's running to prove scheduler back to normal

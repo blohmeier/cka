@@ -2,7 +2,8 @@
 @lab.DropDownList(name)[val1,val2]
 
 <details><summary> Q1 | Contexts | 1% </summary><p>
-
+  ```PowerShell-linenums
+  ```
   ![q1](../images/q1.png) </p> </details>
 
 <details><summary> Q2 | Schedule Pod on Master Node | 3% </summary><p>

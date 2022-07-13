@@ -1,6 +1,3 @@
-@lab.MaskedTextBox(name)
-@lab.DropDownList(name)[val1,val2]
-
 
 ```PowerShell-linenums
 test

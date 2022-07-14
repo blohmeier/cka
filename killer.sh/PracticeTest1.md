@@ -504,9 +504,14 @@ find /etc/cni/net.d/; cat /etc/cni/net.d/10-weave.conflist #for #4
   
 ```bash
 echo -e 'kubectl get events -A --sort-by=.metadata.creationTimestamp' >> /opt/course/15/cluster_events.sh
+
 k -n kube-system delete pod <pod running on cluster2-worker1 as per command: k -n kube-system get pod -o wide | grep proxy> $fg
 sh /opt/course/15/cluster_events.sh >> /opt/course/15/pod_kill.log
-ssh cluster2-worker1; crictl ps | grep kube-proxy #record CONTAINER name for next command; critcl stop/rm <CONTAINER name from prev command>; crictl ps | grep kube-proxy #confirm new container was created; exit
+
+ssh cluster2-worker1
+crictl ps | grep kube-proxy #record CONTAINER name for next command
+critcl stop/rm <CONTAINER name from prev command>
+exit
 sh /opt/course/15/cluster_events.sh >> /opt/course/15/container_kill.log #write new events into second file
 ```
 </p>

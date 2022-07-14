@@ -1,9 +1,9 @@
 <details><summary>Exam links</summary>
 https://killer.sh/dashboard
 
-DON'T UNDERSTAND: 
-8
-11
+GOOD TO KNOW: 
+6, 9, 20, 24-25
+2, 12, 15, 18, 22-23
 
   
 EXPIREABLE:

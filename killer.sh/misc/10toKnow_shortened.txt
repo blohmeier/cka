@@ -1,0 +1,51 @@
+6, 9, 20, 24-25
+2, 12, 15, 18, 22-23
+
+
+2
+k get no
+k describe node cluster1-master1 | grep -i taint
+k describe node cluster1-master1 | grep Labels -A 10 | grep -i master
+
+k run pod1 --image=httpd:2.4.41-alpine $dy > 2.yml
+ 
+# add/edit under spec.containers:
+name: pod1-container
+# add/edit under spec:
+tolerations:
+- key: node-role.kubernetes.io/master  #default is 'operator: "Exists"
+  effect: NoSchedule
+nodeSelector:
+  node-role.kubernetes.io/master: ""
+
+
+
+
+12
+k -n project-tiger create deploy --image=nginx:1.17.6-alpine deploy-important --replicas=3 $dy > 12.yml
+#add containers details, edit to "id: very-important" in 3 places, and add under spec.template.spec:
+affinity:                                             
+podAntiAffinity:                                    
+  requiredDuringSchedulingIgnoredDuringExecution:   
+  - labelSelector:                                  
+	  matchExpressions:                             
+	  - key: id                                     
+		operator: In                                
+		values:                                     
+		- very-important                            
+	topologyKey: kubernetes.io/hostname
+
+15
+echo -e 'kubectl get events -A --sort-by=.metadata.creationTimestamp' >> /opt/course/15/cluster_events.sh
+k -n kube-system delete pod <pod name on cluster2-worker1 from 'k -n kube-system get pod -o wide | grep proxy'> && sh /opt/course/15/cluster_events.sh >> /opt/course/15/pod_kill.log
+
+ssh cluster2-worker1
+crictl ps | grep kube-proxy #get container ID
+critcl stop <container ID> ; critcl rm <container ID>
+exit
+sh /opt/course/15/cluster_events.sh >> /opt/course/15/container_kill.log
+18
+
+22
+
+23

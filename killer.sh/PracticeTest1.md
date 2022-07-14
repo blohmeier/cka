@@ -54,13 +54,16 @@ k describe node cluster1-master1 | grep Labels -A 10 | grep -i master # for node
 
 k run pod1 --image=httpd:2.4.41-alpine $dy > 2.yml
 vim 2.yml
-# edit under spec.containers:
+ 
+# add/edit under spec.containers:
 name: pod1-container
-# add spec.tolerations: and add under it:
-- effect: NoSchedule                   
-  key: node-role.kubernetes.io/master
-# add spec.nodeSelector: and add under it:
-node-role.kubernetes.io/master: ""
+
+# add/edit under spec:
+tolerations:
+- key: node-role.kubernetes.io/master  #default is 'operator: "Exists"
+  effect: NoSchedule
+nodeSelector:
+  node-role.kubernetes.io/master: ""
 
 ??ABOVE: why "" after nodeSelector??
 

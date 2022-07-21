@@ -5,7 +5,7 @@
 
 <details><summary> Q2 | Schedule Pod on Master Node | 3% </summary><p>
 
-  ![q2a](../images/q2a.png) ![q2b](../images/q2b.png) ![q2error](../images/q2error.png)</p> </details>
+  ![q2a](../images/q2a.png) ![q2b](../images/q2b.png) ![q2errorV2](../images/q2errorV2.png)</p> </details>
 
 <details><summary> Q3 | Scale down StatefulSet | 1% </summary><p>
 
